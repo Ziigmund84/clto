@@ -147,3 +147,5 @@ table.list img.thumb { width: 56px; height: 42px; object-fit: cover; border-radi
 .toast { position: fixed; bottom: 20px; left: 50%; transform: translate(-50%, 120px); background: var(--navy); color: #fff; padding: 12px 20px; border-radius: 999px; font-weight: 700; z-index: 100; transition: transform .3s; }
 .toast.show { transform: translate(-50%, 0); }
 .toast.err { background: var(--red); }
+.drawer { visibility: hidden; transition: transform .35s cubic-bezier(.2,.8,.2,1), visibility 0s .35s; }
+.drawer.open { visibility: visible; transition: transform .35s cubic-bezier(.2,.8,.2,1); }

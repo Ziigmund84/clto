@@ -599,7 +599,9 @@
         const doc = new DOMParser().parseFromString(html, 'text/html');
         const blocks = $$('[data-cms]', doc).map((el) => {
           const sec = el.closest('section');
-          const heading = sec ? (sec.querySelector('h1,h2') || {}).textContent : '';
+          const card = el.closest('.pub-card,.pillar,.callout,.price-card,.tl-item,.f,.cta-band');
+          const local = card && card.querySelector('h3,h2');
+          const heading = (local && local !== el ? local.textContent : '') || (sec ? (sec.querySelector('h1,h2') || {}).textContent : '');
           const tag = el.tagName;
           const complex = /<(div|table|section|figure)/i.test(el.innerHTML);
           const mode = ['H1', 'H2', 'H3', 'H4', 'P', 'SPAN'].includes(tag) ? 'text' : complex ? 'code' : 'html';

@@ -242,7 +242,7 @@
     qsa('.page-hero h1, [data-split]').forEach((h) => {
       if (h.closest('.hero')) return;
       const words = h.textContent.trim().split(/\s+/);
-      h.innerHTML = words.map((w) => `<span style="display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.06em"><span class="w" style="display:inline-block">${esc(w)}</span></span>`).join(' ');
+      h.innerHTML = words.map((w) => `<span class="split-word"><span class="w" style="display:inline-block">${esc(w)}</span></span>`).join(' ');
       gsap.from(qsa('.w', h), { yPercent: 110, rotate: 6, duration: 0.9, ease: 'expo.out', stagger: 0.06, delay: 0.1 });
     });
     qsa('.page-hero .lead, .page-hero .btn-row').forEach((el, i) => gsap.from(el, { y: 24, opacity: 0, duration: 0.8, delay: 0.45 + i * 0.1, ease: 'power3.out' }));

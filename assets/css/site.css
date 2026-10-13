@@ -619,3 +619,19 @@ body.header-hidden .subnav { top: 0; }
 @media print { .site-header, .mobile-menu, .site-footer, .ticker, .shuttle { display: none !important; } .page-hero, .hero { background: none; color: var(--ink); padding-top: 20px; } }
 #hero-shuttle { position: absolute; inset: 0; pointer-events: none; z-index: 5; }
 .timeline::before { transform-origin: top; transform: scaleY(var(--tl, 1)); }
+
+/* ---- Ajustements après relecture ---- */
+/* accents des capitales (À, É) non rognés par les masques d'animation */
+.hero h1 .line { padding-top: .16em; margin-top: -.16em; }
+.split-word { display: inline-block; overflow: hidden; vertical-align: top; padding: .16em 0 .06em; margin: -.16em 0 -.06em; }
+/* boutons et accents sur fonds sombres */
+.site-header:not(.is-solid):not(.on-light) .btn-ghost { --b: rgba(255,255,255,.6); --c: var(--white); }
+.site-header:not(.is-solid):not(.on-light) .btn-ghost:hover { background: var(--white); --c: var(--navy); }
+.publics .sec-head .kicker, .cta-band .sec-head .kicker { color: var(--gold-2); }
+.publics .btn-ghost, .cta-band .btn-ghost { --b: rgba(255,255,255,.7); --c: var(--white); }
+.publics .btn-ghost:hover, .cta-band .btn-ghost:hover { background: var(--white); --c: var(--navy); }
+.bg-navy a.agenda-item, .bg-navy a.rung { color: var(--white); }
+.pub-card img { width: 114%; left: -7%; }
+.ticker + [data-alert] .alert-band { padding-top: 14px; }
+.day-col h3 { flex-direction: column; align-items: flex-start; gap: 2px; }
+@media (min-width: 1101px) { #planning .wrap { width: min(100% - 2 * var(--gutter), 1400px); } }

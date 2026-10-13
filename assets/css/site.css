@@ -622,8 +622,8 @@ body.header-hidden .subnav { top: 0; }
 
 /* ---- Ajustements après relecture ---- */
 /* accents des capitales (À, É) non rognés par les masques d'animation */
-.hero h1 .line { padding-top: .16em; margin-top: -.16em; }
-.split-word { display: inline-block; overflow: hidden; vertical-align: top; padding: .16em 0 .06em; margin: -.16em 0 -.06em; }
+.hero h1 .line { padding-top: .3em; margin-top: -.3em; }
+.split-word { display: inline-block; overflow: hidden; vertical-align: top; padding: .3em 0 .06em; margin: -.3em 0 -.06em; }
 /* boutons et accents sur fonds sombres */
 .site-header:not(.is-solid):not(.on-light) .btn-ghost { --b: rgba(255,255,255,.6); --c: var(--white); }
 .site-header:not(.is-solid):not(.on-light) .btn-ghost:hover { background: var(--white); --c: var(--navy); }

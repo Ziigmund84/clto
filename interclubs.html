@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Interclubs — CLTO Badminton Orléans</title>
+<meta name="description" content="Les cinq équipes interclubs du CLTO Badminton, de la Départementale 1 à la Nationale 2 : divisions, résultats en direct sur Icbad et prochains matchs à domicile.">
+<meta name="theme-color" content="#0a2457">
+<meta property="og:title" content="Interclubs — CLTO Badminton Orléans">
+<meta property="og:description" content="Les cinq équipes interclubs du CLTO Badminton, de la Départementale 1 à la Nationale 2 : divisions, résultats en direct sur Icbad et prochains matchs à domicile.">
+<meta property="og:image" content="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/clto-media/import/logo-android-chrome-512x512.webp">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/webp" href="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/clto-media/import/logo-favicon-32x32.webp">
+<link rel="apple-touch-icon" href="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/clto-media/import/logo-apple-touch-icon.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://kdcflcvufukagdjycwww.supabase.co" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Big+Shoulders+Display:wght@700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+<main id="main">
+<section class="page-hero" data-court data-shuttle>
+  <div class="page-hero-img"><img src="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/clto-media/import/Copie_de_N2_12f3927e04.webp" alt=""></div>
+  <div class="wrap">
+    <h1>Interclubs</h1>
+    <p class="lead" data-cms="interclubs.intro">De la Nationale 2 à la Départementale 1, le CLTO aligne cinq équipes dans les championnats par équipes, de septembre à juin.</p>
+    <div class="btn-row"><a class="btn btn-gold" data-link="icbad" href="https://icbad.ffbad.org/" target="_blank" rel="noopener">Résultats en direct sur Icbad</a></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap split top">
+    <div>
+      <div class="sec-head" data-reveal><span class="kicker">Saison <span data-setting="club.season">2026-2027</span></span><h2>Nos équipes</h2>
+        <p class="lead" data-cms="interclubs.equipes">Chaque rencontre est l'occasion de représenter le club avec fierté et solidarité. Les compositions sont établies par les capitaines et l'équipe technique.</p></div>
+      <div class="ladder" id="ladder" data-reveal="stagger"></div>
+    </div>
+    <div id="team-cards" class="agenda-list"></div>
+  </div>
+</section>
+
+<section class="section bg-navy">
+  <div class="wrap">
+    <div class="sec-head" data-reveal><span class="kicker">À domicile, gymnase Chardon</span><h2>Venez encourager les Bleus</h2>
+      <p class="lead" data-cms="interclubs.domicile">Les rencontres de Nationale 2 se jouent le samedi à 15h45. Les tribunes comptent sur vous !</p></div>
+    <div class="agenda-list" id="home-matches"></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap split top">
+    <div class="sec-head" data-reveal><span class="kicker">Charte interclubs</span><h2>Un engagement collectif</h2></div>
+    <div class="prose" data-reveal data-cms="interclubs.charte">
+      <p>En rejoignant une équipe interclubs du CLTO, chaque joueur s'engage à respecter les valeurs et les règles qui font la force de notre club : esprit d'équipe, respect, fair-play et solidarité.</p>
+      <p>La charte complète est remise aux joueurs en début de saison. Pour toute question, rapprochez-vous de votre capitaine ou du responsable des équipes.</p>
+    </div>
+  </div>
+</section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/MotionPathPlugin.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/core.js"></script>
+<script src="assets/js/pages/interclubs.js"></script>
+</body>
+</html>

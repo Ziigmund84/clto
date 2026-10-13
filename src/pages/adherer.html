@@ -1,0 +1,104 @@
+<!--{"title": "S'inscrire et tarifs — CLTO Badminton Orléans", "description": "Inscription en ligne au CLTO Badminton : tarifs des licences et des cours encadrés 2026-2027, réductions, aides (Pass Sport, Pass'Loisir, Yep's), paiement et documents.", "scripts": ["pages/adherer.js"]}-->
+<section class="page-hero" data-court data-shuttle>
+  <div class="page-hero-img"><img src="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/clto-media/import/Capture_d_ecran_2026_08_07_181148_684b98ec83.webp" alt=""></div>
+  <div class="wrap">
+    <h1>S'inscrire au club</h1>
+    <p class="lead" data-cms="adherer.intro">Les inscriptions pour la saison sont ouvertes. Tout se fait en ligne : préparez vos documents, choisissez votre formule, et rendez-vous sur le terrain.</p>
+    <div class="btn-row"><a class="btn btn-gold" href="#etapes">Commencer</a><a class="btn btn-ghost" href="#tarifs">Voir les tarifs</a></div>
+  </div>
+</section>
+
+<div data-alert></div>
+
+<nav class="subnav" aria-label="Dans cette page"><div class="wrap"><ul>
+  <li><a href="#etapes">Inscription</a></li><li><a href="#tarifs">Tarifs</a></li><li><a href="#reductions">Réductions et aides</a></li><li><a href="#paiement">Paiement</a></li><li><a href="#avantages">Avantages</a></li><li><a href="#documents">Documents</a></li>
+</ul></div></nav>
+
+<section class="section" id="etapes">
+  <div class="wrap split top">
+    <div>
+      <div class="sec-head" data-reveal><span class="kicker">En trois temps</span><h2>Comment s'inscrire</h2></div>
+      <div class="timeline" style="--tl:1" data-reveal="stagger">
+        <div class="tl-item"><div class="tl-year">1</div><div><h3>Préparer les documents</h3><div data-cms="adherer.etape1"><p>Autorisation parentale pour les mineurs, justificatif de réduction le cas échéant, certificat médical uniquement s'il est demandé.</p></div></div></div>
+        <div class="tl-item"><div class="tl-year">2</div><div><h3>Répondre au questionnaire de santé</h3><div data-cms="adherer.etape2"><p>Il se remplit pendant l'inscription en ligne. Une réponse « oui » à une question : un certificat médical de moins de 6 mois sera demandé. Que des « non » : aucun certificat.</p></div></div></div>
+        <div class="tl-item"><div class="tl-year">3</div><div><h3>Faire la demande de licence</h3><div data-cms="adherer.etape3"><p>Via votre compte MyFFBaD, personnel à chaque joueur : pour plusieurs licences dans une même famille, faites une demande depuis chaque compte.</p></div></div></div>
+      </div>
+    </div>
+    <div class="callout info" data-reveal="right" style="position:sticky;top:150px">
+      <h3>Avez-vous déjà eu une licence de badminton ?</h3>
+      <div class="btn-row" style="margin:12px 0 18px" role="group" aria-label="Votre situation">
+        <button class="filter-btn" type="button" data-q="oui" aria-pressed="false">Oui, j'ai déjà été licencié</button>
+        <button class="filter-btn" type="button" data-q="non" aria-pressed="false">Non, c'est ma première licence</button>
+      </div>
+      <div id="q-oui" hidden data-cms="adherer.parcours.oui"><p>Connectez-vous à votre compte <strong>MyFFBaD</strong> avec vos identifiants habituels, puis faites votre demande de licence auprès du <strong>CLTO Badminton Orléans</strong>. Vous recevrez ensuite un e-mail de validation de la FFBaD pour régler votre cotisation.</p><p><a class="btn btn-small" data-link="myffbad" href="https://myffbad.fr/" target="_blank" rel="noopener">Ouvrir MyFFBaD</a></p></div>
+      <div id="q-non" hidden data-cms="adherer.parcours.non"><p>Créez votre compte <strong>MyFFBaD</strong>, puis faites une demande de première licence en choisissant le club <strong>CLTO Badminton Orléans</strong>. Pas encore sûr ? Profitez d'abord de vos <strong>deux séances d'essai gratuites</strong>.</p><p><a class="btn btn-small" data-link="myffbad" href="https://myffbad.fr/" target="_blank" rel="noopener">Créer mon compte</a></p></div>
+      <p class="form-note" style="margin:0">Une question ? <a href="contact.html?sujet=Inscription">Écrivez au secrétariat</a>.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section bg-mist" id="tarifs">
+  <div class="wrap">
+    <div class="sec-head" data-reveal><span class="kicker">Saison <span data-setting="club.season">2026-2027</span></span><h2>Les tarifs</h2>
+      <p class="lead" data-cms="adherer.tarifs.intro">Licences valables du 1er août au 31 août de l'année suivante. Les cours encadrés s'ajoutent à la licence, sauf pour le Baby-Bad et le Minibad. Tarifs susceptibles d'évoluer selon les décisions fédérales.</p></div>
+    <div class="price-cards" id="licences" data-reveal="stagger"></div>
+    <div class="tables-grid" id="price-tables" style="margin-top:56px" data-reveal></div>
+    <p class="form-note" style="margin-top:20px" data-cms="adherer.tarifs.note">Cours individuels, Club Avenir et Projet Jeune Talent : sous réserve d'acceptation du coordinateur technique.</p>
+  </div>
+</section>
+
+<section class="section" id="reductions">
+  <div class="wrap split top">
+    <div data-reveal>
+      <div class="sec-head"><span class="kicker">Réductions</span><h2>Moins cher, à plusieurs</h2></div>
+      <div class="prose" data-cms="adherer.reductions"><p>Les réductions du club ne sont pas cumulables.</p><ul>
+        <li><strong>−20 €</strong> de fidélité au renouvellement d'une licence CLTO (hors licence estivale et non joueur) ;</li>
+        <li><strong>−30 %</strong> sur les licences mi-saison, du 1er février au 1er mai ;</li>
+        <li><strong>−10 %</strong> pour les étudiants, demandeurs d'emploi et bénéficiaires du RSA ;</li>
+        <li><strong>−10 %</strong> à partir de trois licenciés d'un même foyer.</li></ul></div>
+    </div>
+    <div data-reveal>
+      <div class="sec-head"><span class="kicker">Aides</span><h2>Ils financent votre licence</h2></div>
+      <div class="prose" data-cms="adherer.aides"><ul>
+        <li><strong>Pass'Loisir (CAF)</strong> : 50 € pour les licences jeunes des familles éligibles. Document original à remettre au club sous enveloppe nominative, avant le 30 novembre.</li>
+        <li><strong>Pass Sport</strong> : 50 € pour les jeunes éligibles et les étudiants boursiers. Code à saisir dans le dossier d'inscription, avant le 31 décembre.</li>
+        <li><strong>Yep's</strong> : 20 € pour les 15–25 ans. Identifiant à saisir dans le dossier, avant le 15 novembre.</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="section bg-navy" id="paiement">
+  <div class="wrap">
+    <div class="sec-head" data-reveal><span class="kicker">Paiement</span><h2>Régler sa licence</h2>
+      <p class="lead" data-cms="adherer.paiement.intro">En ligne, au siège du club ou par courrier (CLTO Badminton, 1 boulevard de Québec, 45000 Orléans). La carte bancaire est recommandée : la licence est validée automatiquement.</p></div>
+    <div class="pillars" data-reveal="stagger" data-cms="adherer.paiement">
+      <div class="pillar"><h3>Carte bancaire</h3><p>Recommandée. À réception du second e-mail de validation de la FFBaD, en 1, 2 ou 3 fois.</p></div>
+      <div class="pillar"><h3>Virement</h3><p>En une fois, libellé « LICENCE » + nom du licencié. IBAN : FR76 3004 7146 7000 0203 5420 117.</p></div>
+      <div class="pillar"><h3>Chèque</h3><p>À l'ordre du CLTO Badminton, jusqu'à 3 chèques remis ensemble, encaissés sur trois mois.</p></div>
+      <div class="pillar"><h3>Autres moyens</h3><p>Chèques-Vacances, Coupons Sport, Chèque Up Sport &amp; Loisirs. Espèces en dernier recours.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="avantages">
+  <div class="wrap">
+    <div class="sec-head" data-reveal><span class="kicker">Être licencié au CLTO</span><h2>Les avantages de la licence</h2></div>
+    <div class="pillars" data-reveal="stagger" data-cms="adherer.avantages">
+      <div class="pillar"><h3>Un cordage offert</h3><p>Chez Lardesports Orléans sur présentation de la licence (pose non comprise).</p></div>
+      <div class="pillar"><h3>Boutique du club</h3><p>Tarifs préférentiels sur les textiles, les volants et l'équipement.</p></div>
+      <div class="pillar"><h3>Volants fournis</h3><p>Sur les créneaux de jeu libre Loisirs et pendant les cours encadrés.</p></div>
+      <div class="pillar"><h3>Stages du club</h3><p>Accès à tous les stages de la saison, dans la limite des places.</p></div>
+    </div>
+    <div class="split top" style="margin-top:56px">
+      <div class="callout info" data-reveal><h3>Séances d'essai</h3><div data-cms="adherer.essai"><p>Deux séances gratuites avant de vous inscrire, sur le créneau de votre choix. Présentez-vous à l'entraîneur ou à l'ouvreur et scannez le QR code d'assurance FFBaD le jour même. Raquettes de prêt disponibles.</p></div></div>
+      <div class="callout" data-reveal><h3>Bon à savoir</h3><div data-cms="adherer.bonasavoir"><p>Les jeunes accèdent au jeu libre accompagnés d'un adulte. La licence extérieure est soumise à l'accord du conseil d'administration et donne accès au jeu libre selon les places.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section bg-mist" id="documents">
+  <div class="wrap">
+    <div class="sec-head" data-reveal><span class="kicker">À télécharger</span><h2>Documents</h2></div>
+    <div class="docs" id="docs" data-reveal="stagger"></div>
+  </div>
+</section>

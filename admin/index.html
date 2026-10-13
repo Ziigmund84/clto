@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Administration — CLTO Badminton</title>
+<link rel="icon" type="image/webp" href="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/clto-media/import/logo-favicon-32x32.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Big+Shoulders+Display:wght@800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<!-- Connexion -->
+<section id="login-view" class="login" hidden>
+  <form class="login-card" id="login-form">
+    <img src="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/clto-media/import/logo-android-chrome-512x512.webp" alt="" width="84" height="84">
+    <h1>Espace admin</h1>
+    <p class="muted">Gérez les contenus du site du CLTO Badminton.</p>
+    <label>E-mail<input type="email" id="login-email" autocomplete="username" required></label>
+    <label>Mot de passe<input type="password" id="login-pass" autocomplete="current-password" required></label>
+    <button class="btn" type="submit">Se connecter</button>
+    <button class="linklike" type="button" id="forgot">Mot de passe oublié ?</button>
+    <p class="status" id="login-status" role="status"></p>
+    <a class="linklike" href="../index.html">← Retour au site</a>
+  </form>
+  <form class="login-card" id="reset-form" hidden>
+    <h1>Nouveau mot de passe</h1>
+    <p class="muted">Choisissez votre nouveau mot de passe (8 caractères minimum).</p>
+    <label>Nouveau mot de passe<input type="password" id="reset-pass" autocomplete="new-password" minlength="8" required></label>
+    <button class="btn" type="submit">Enregistrer</button>
+    <p class="status" id="reset-status" role="status"></p>
+  </form>
+</section>
+
+<!-- Application -->
+<div id="app" class="app" hidden>
+  <aside class="sidebar" id="sidebar">
+    <a class="side-brand" href="../index.html" target="_blank" rel="noopener">
+      <img src="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/clto-media/import/logo-android-chrome-512x512.webp" alt="" width="40" height="40">
+      <span>CLTO<br><small>Administration</small></span>
+    </a>
+    <nav id="side-nav" aria-label="Sections"></nav>
+    <div class="side-foot"><span id="who"></span><button class="linklike" id="logout" type="button">Se déconnecter</button></div>
+  </aside>
+  <main class="main">
+    <header class="topbar">
+      <button class="menu-btn" id="menu-btn" type="button" aria-label="Menu">☰</button>
+      <h1 id="view-title">Tableau de bord</h1>
+      <div class="top-actions" id="top-actions"></div>
+    </header>
+    <div class="content" id="view"></div>
+  </main>
+</div>
+
+<!-- Panneau d'édition -->
+<div class="drawer-backdrop" id="drawer-bg" hidden></div>
+<aside class="drawer" id="drawer" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
+  <header><h2 id="drawer-title">Modifier</h2><button class="icon-btn" id="drawer-close" type="button" aria-label="Fermer">✕</button></header>
+  <form id="drawer-form" novalidate></form>
+  <footer><button class="btn btn-danger" id="drawer-delete" type="button" hidden>Supprimer</button><span class="grow"></span><button class="btn btn-ghost" id="drawer-cancel" type="button">Annuler</button><button class="btn" id="drawer-save" type="button">Enregistrer</button></footer>
+</aside>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+<script src="../assets/js/config.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

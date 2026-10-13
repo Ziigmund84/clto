@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact et FAQ — CLTO Badminton Orléans</title>
+<meta name="description" content="Contacter le CLTO Badminton : siège au 1 boulevard de Québec à Orléans, téléphone, e-mail, horaires du secrétariat, formulaire et questions fréquentes.">
+<meta name="theme-color" content="#0a2457">
+<meta property="og:title" content="Contact et FAQ — CLTO Badminton Orléans">
+<meta property="og:description" content="Contacter le CLTO Badminton : siège au 1 boulevard de Québec à Orléans, téléphone, e-mail, horaires du secrétariat, formulaire et questions fréquentes.">
+<meta property="og:image" content="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/clto-media/import/logo-android-chrome-512x512.webp">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/webp" href="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/clto-media/import/logo-favicon-32x32.webp">
+<link rel="apple-touch-icon" href="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/clto-media/import/logo-apple-touch-icon.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://kdcflcvufukagdjycwww.supabase.co" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Big+Shoulders+Display:wght@700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+<main id="main">
+<section class="page-hero" data-court data-shuttle>
+  <div class="wrap">
+    <h1>Nous contacter</h1>
+    <p class="lead" data-cms="contact.intro">Une question sur les créneaux, l'inscription, un partenariat ? Le secrétariat vous répond, et les réponses aux questions les plus fréquentes sont juste en dessous.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap split top">
+    <div>
+      <div class="sec-head" data-reveal><span class="kicker">Nos coordonnées</span><h2>Le siège du club</h2></div>
+      <div class="contact-cards" data-reveal="stagger">
+        <div class="contact-card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><div><b>Adresse</b><span data-setting="club.address">1 Boulevard de Québec, 45000 Orléans</span></div></div>
+        <a class="contact-card" id="c-mail" href="mailto:contact@cltobadminton.fr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><div><b>E-mail</b><span data-setting="club.email">contact@cltobadminton.fr</span></div></a>
+        <a class="contact-card" id="c-tel" href="tel:0665296372"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg><div><b>Téléphone, SMS, WhatsApp</b><span data-setting="club.phone">06 65 29 63 72</span></div></a>
+        <div class="contact-card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div><b>Horaires du secrétariat</b><div data-setting="club.hours" data-setting-html><p>Lundi et mardi : 9h30 – 16h, accueil au siège social</p><p>Mercredi et jeudi : 9h30 – 16h, par téléphone ou e-mail</p></div></div></div>
+      </div>
+      <div id="hq-map" style="margin-top:20px" role="region" aria-label="Carte du siège social"></div>
+    </div>
+    <div data-reveal="right">
+      <div class="sec-head"><span class="kicker">Formulaire</span><h2>Envoyez-nous un message</h2></div>
+      <form class="form" id="contact-form" novalidate>
+        <div class="form-row">
+          <div class="field"><label for="c-name">Nom et prénom *</label><input id="c-name" name="name" required autocomplete="name"></div>
+          <div class="field"><label for="c-email">E-mail *</label><input id="c-email" name="email" type="email" required autocomplete="email"></div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label for="c-phone">Téléphone</label><input id="c-phone" name="phone" type="tel" autocomplete="tel"></div>
+          <div class="field"><label for="c-subject">Sujet *</label><select id="c-subject" name="subject" required><option value="">Choisir un sujet</option><option>Inscription</option><option>Renseignement</option><option>Partenariat</option><option>Jeune</option><option>Adulte</option><option>Vétéran</option><option>Compétition</option><option>Loisir</option></select></div>
+        </div>
+        <div class="field"><label for="c-message">Message *</label><textarea id="c-message" name="message" required maxlength="4000"></textarea></div>
+        <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <p class="form-note">Vos données servent uniquement à vous répondre. Voir la <a href="mentions.html#confidentialite">politique de confidentialité</a>.</p>
+        <div><button class="btn" type="submit">Envoyer le message</button> <span class="form-status" id="c-status" role="status"></span></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="section bg-mist" id="faq">
+  <div class="wrap-narrow">
+    <div class="sec-head" data-reveal><span class="kicker">FAQ</span><h2>Questions fréquentes</h2></div>
+    <div class="filters" id="faq-cats" role="group" aria-label="Filtrer les questions"></div>
+    <div class="faq" id="faq-list"><div class="skeleton"></div></div>
+  </div>
+</section>
+
+<section class="section" id="avis">
+  <div class="wrap split top">
+    <div class="sec-head" data-reveal><span class="kicker">Votre avis nous intéresse</span><h2>Une idée pour le club ?</h2>
+      <p class="lead" data-cms="contact.avis">Une suggestion, un retour sur le site ou sur la vie du club ? Vos avis restent privés et ne sont lus que par l'équipe. Vous pouvez rester anonyme.</p></div>
+    <form class="form" id="avis-form" data-reveal="right">
+      <div class="form-row">
+        <div class="field"><label for="a-name">Nom (facultatif)</label><input id="a-name" name="name" autocomplete="name"></div>
+        <div class="field"><label for="a-email">E-mail (facultatif)</label><input id="a-email" name="email" type="email" autocomplete="email"></div>
+      </div>
+      <div class="field"><label for="a-message">Votre avis ou suggestion *</label><textarea id="a-message" name="message" required maxlength="4000"></textarea></div>
+      <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <div><button class="btn btn-gold" type="submit">Envoyer mon avis</button> <span class="form-status" id="a-status" role="status"></span></div>
+    </form>
+  </div>
+</section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/MotionPathPlugin.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/core.js"></script>
+<script src="assets/js/pages/contact.js"></script>
+</body>
+</html>

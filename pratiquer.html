@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Créneaux et gymnases — CLTO Badminton Orléans</title>
+<meta name="description" content="Le planning hebdomadaire des créneaux du CLTO Badminton : entraînements encadrés, jeu libre, matchs pour tous, et les six gymnases du club à Orléans.">
+<meta name="theme-color" content="#0a2457">
+<meta property="og:title" content="Créneaux et gymnases — CLTO Badminton Orléans">
+<meta property="og:description" content="Le planning hebdomadaire des créneaux du CLTO Badminton : entraînements encadrés, jeu libre, matchs pour tous, et les six gymnases du club à Orléans.">
+<meta property="og:image" content="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/clto-media/import/logo-android-chrome-512x512.webp">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/webp" href="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/clto-media/import/logo-favicon-32x32.webp">
+<link rel="apple-touch-icon" href="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/clto-media/import/logo-apple-touch-icon.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://kdcflcvufukagdjycwww.supabase.co" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Big+Shoulders+Display:wght@700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+<main id="main">
+<section class="page-hero" data-court data-shuttle>
+  <div class="page-hero-img"><img src="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/clto-media/import/Championnar_Ligue_26_4b4ce1d587.webp" alt=""></div>
+  <div class="wrap">
+    <h1>Créneaux et gymnases</h1>
+    <p class="lead" data-cms="pratiquer.intro">Plus de 57 heures de badminton chaque semaine, réparties dans six gymnases d'Orléans. Filtrez le planning pour trouver le créneau qui vous ressemble.</p>
+    <div class="btn-row"><a class="btn btn-gold" href="#planning">Voir le planning</a><a class="btn btn-ghost" href="#gymnases">Les gymnases</a></div>
+  </div>
+</section>
+
+<div data-alert></div>
+
+<nav class="subnav" aria-label="Dans cette page"><div class="wrap"><ul>
+  <li><a href="#planning">Planning</a></li><li><a href="#niveaux">Niveaux</a></li><li><a href="#gymnases">Gymnases</a></li><li><a href="#stages">Stages</a></li>
+</ul></div></nav>
+
+<section class="section" id="planning">
+  <div class="wrap">
+    <div class="sec-head-row">
+      <div class="sec-head" data-reveal><span class="kicker">Planning indicatif <span data-setting="club.season">2026-2027</span></span><h2>La semaine type</h2></div>
+    </div>
+    <div class="planning-tools" role="group" aria-label="Filtrer les créneaux">
+      <label>Public<select class="select" id="f-audience"><option value="">Tous les publics</option><option>Jeunes</option><option>Adultes</option><option>Compétiteurs</option><option>Tous</option></select></label>
+      <label>Type de séance<select class="select" id="f-kind"><option value="">Toutes les séances</option><option>Entraînement</option><option>Jeu libre</option></select></label>
+      <label>Gymnase<select class="select" id="f-gym"><option value="">Tous les gymnases</option></select></label>
+      <p class="muted" id="slot-count" style="margin:22px 0 0" aria-live="polite"></p>
+    </div>
+    <div class="week" id="week"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div>
+    <div class="legend">
+      <span><i style="background:var(--blue)"></i>Entraînement encadré</span>
+      <span><i style="background:var(--gold)"></i>Jeu libre (sans encadrement)</span>
+      <span>Un créneau sans ouvreur est annulé : suivez les annonces du club.</span>
+    </div>
+  </div>
+</section>
+
+<section class="section bg-mist" id="niveaux">
+  <div class="wrap">
+    <div class="sec-head" data-reveal><span class="kicker">Groupes adultes</span><h2>Quatre niveaux d'entraînement</h2>
+      <p class="lead" data-cms="pratiquer.niveaux.intro">L'affectation se fait sur proposition de l'entraîneur, selon votre niveau et les places disponibles.</p></div>
+    <div class="levels" data-reveal="stagger">
+      <div class="level"><div class="bar"><i class="on"></i><i></i><i></i><i></i></div><h3>Débutant</h3><p>Moins de 3 ans de pratique : les bases techniques et les déplacements.</p></div>
+      <div class="level"><div class="bar"><i class="on"></i><i class="on"></i><i></i><i></i></div><h3>Intermédiaire</h3><p>Plus de 3 ans de pratique, pour progresser sans compétition régulière.</p></div>
+      <div class="level"><div class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div><h3>Perfectionnement</h3><p>Compétiteurs réguliers classés au minimum D8 sur un tableau.</p></div>
+      <div class="level"><div class="bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div><h3>Élite</h3><p>Compétiteurs réguliers classés au minimum R sur un tableau.</p></div>
+    </div>
+    <div class="split top" style="margin-top:56px">
+      <div class="callout info" data-reveal><h3>Jeu libre</h3><div data-cms="pratiquer.jeulibre"><p>Les créneaux de jeu libre se jouent sans encadrement ni inscription à un groupe : on arrive, on joue avec les licenciés présents. Les jeunes y accèdent accompagnés d'un adulte. Les volants sont fournis sur les créneaux Loisirs.</p></div></div>
+      <div class="callout" data-reveal><h3>Séance d'essai</h3><div data-cms="pratiquer.essai"><p>Deux séances d'essai gratuites : présentez-vous à l'entraîneur ou à l'ouvreur du créneau et activez l'assurance FFBaD le jour même grâce au QR code. Des raquettes de prêt vous attendent.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="gymnases">
+  <div class="wrap">
+    <div class="sec-head" data-reveal><span class="kicker">Où jouer</span><h2>Six gymnases à Orléans</h2>
+      <p class="lead"><span id="gym-total">38</span> terrains au total. Cliquez sur un gymnase pour le situer et préparer votre itinéraire.</p></div>
+    <div class="gyms">
+      <div class="gym-list" id="gym-list"></div>
+      <div id="gym-map" role="region" aria-label="Carte des gymnases"></div>
+    </div>
+  </div>
+</section>
+
+<section class="section bg-navy" id="stages">
+  <div class="wrap split top">
+    <div class="sec-head" data-reveal><span class="kicker">Pendant les vacances</span><h2>Stages pour progresser</h2>
+      <p class="lead" data-cms="pratiquer.stages">À chaque période de vacances, les entraîneurs du club proposent des stages pour tous les niveaux : journées collectives, séances individuelles et soirées adultes.</p>
+      <a class="btn btn-gold" href="agenda.html?type=Stage">Tous les stages</a></div>
+    <div class="agenda-list" id="next-stages"></div>
+  </div>
+</section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/MotionPathPlugin.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/core.js"></script>
+<script src="assets/js/pages/pratiquer.js"></script>
+</body>
+</html>

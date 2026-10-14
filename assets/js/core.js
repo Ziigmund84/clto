@@ -231,7 +231,8 @@
     /* lignes du terrain qui se tracent, puis le filet se tend */
     qsa('.court-svg').forEach((svg) => {
       const lines = qsa('.ln', svg);
-      lines.forEach((l) => { const len = l.getTotalLength ? l.getTotalLength() : 2000; l.style.strokeDasharray = len; l.style.strokeDashoffset = len; });
+      const lenOf = (l) => { const n = (k) => parseFloat(l.getAttribute(k)) || 0; return l.tagName === 'rect' ? 2 * (n('width') + n('height')) : Math.hypot(n('x2') - n('x1'), n('y2') - n('y1')); };
+      lines.forEach((l) => { const len = lenOf(l) + 2; l.style.strokeDasharray = len; l.style.strokeDashoffset = len; });
       const tl = gsap.timeline({ delay: 0.15 });
       tl.from(svg.querySelector('.court-floor'), { opacity: 0, duration: 1.2 }, 0)
         .to(lines, { strokeDashoffset: 0, duration: 1.4, ease: 'power2.inOut', stagger: 0.07 }, 0)

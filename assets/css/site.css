@@ -628,7 +628,7 @@ body.header-hidden .subnav { top: 0; }
 .court-v { display: none; }
 @media (max-width: 760px) { .court-h { display: none; } .court-v { display: block; } .court { inset: calc(var(--header-h) + 10px) 10px 20px; } }
 .court-floor { fill: rgba(31, 111, 209, .16); }
-.court-svg .ln { fill: none; stroke: rgba(255, 255, 255, .34); stroke-width: 2.4; vector-effect: non-scaling-stroke; stroke-linecap: square; }
+.court-svg .ln { fill: none; stroke: rgba(255, 255, 255, .34); stroke-width: 3.2; stroke-linecap: square; }
 .court-svg .net-band { stroke: var(--gold); stroke-width: 3; vector-effect: non-scaling-stroke; opacity: .85; }
 .court-svg .net-mesh { stroke: rgba(255, 255, 255, .5); stroke-width: 9; stroke-dasharray: 1 6; vector-effect: non-scaling-stroke; opacity: .35; }
 .court-svg .post { fill: var(--gold); stroke: var(--navy); stroke-width: 4; vector-effect: non-scaling-stroke; }
@@ -641,7 +641,6 @@ body.header-hidden .subnav { top: 0; }
   position: relative; aspect-ratio: 4 / 5; max-height: 64vh; width: 100%; margin-inline: auto;
   border-radius: 24px; overflow: hidden; background: var(--navy-2); isolation: isolate;
   box-shadow: 0 40px 80px -30px rgba(0, 0, 0, .75);
-  outline: 2px solid rgba(255, 255, 255, .28); outline-offset: 12px;
 }
 .slide { position: absolute; inset: 0; margin: 0; visibility: hidden; }
 .slide.is-prev { visibility: visible; z-index: 1; }
@@ -668,3 +667,9 @@ body.header-hidden .subnav { top: 0; }
   .show-frame { aspect-ratio: 1 / 1; }
 }
 @media (prefers-reduced-motion: reduce) { .show-bars .is-active i::after { transform: scaleX(1); animation: none; } }
+/* Le héros tient dans l'écran : le terrain s'y voit en entier */
+.hero { padding: calc(var(--header-h) + 28px) 0 64px; }
+.hero h1 { font-size: clamp(3rem, 6.4vw, 6.6rem); }
+.hero .lead { max-width: 46ch; }
+.show-frame { max-height: 58vh; }
+.hero-scroll { bottom: 14px; }

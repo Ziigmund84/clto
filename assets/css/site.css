@@ -677,3 +677,8 @@ main, .site-footer { overflow-x: clip; }
 @media (max-width: 760px) { .hero .court-h { display: none; } .hero .court-v { display: block; } }
 .hero .court-svg .ln { stroke: rgba(255, 255, 255, .38); }
 .court-v .ln { stroke-width: 2; }
+/* le bandeau incliné est rogné par son conteneur : rien ne dépasse de l'écran */
+.ticker-wrap { overflow: hidden; margin-top: -46px; padding: 20px 0; position: relative; z-index: 3; }
+.ticker-wrap .ticker { margin-top: 0; }
+/* terrain plus marqué sur mobile */
+@media (max-width: 760px) { .hero .court-svg .ln { stroke: rgba(255, 255, 255, .5); } .court-v .ln { stroke-width: 2.6; } .hero .court-svg .ln-net { stroke: rgba(227, 162, 26, .8); } }

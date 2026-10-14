@@ -9,6 +9,7 @@ Usage : python3 tools/build.py
 import json
 import pathlib
 import re
+import hashlib
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SRC = ROOT / "src" / "pages"
@@ -39,7 +40,7 @@ TEMPLATE = """<!doctype html>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://kdcflcvufukagdjycwww.supabase.co" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Big+Shoulders+Display:wght@700;800;900&display=swap" rel="stylesheet">
-{lib_css}<link rel="stylesheet" href="assets/css/site.css">
+{lib_css}<link rel="stylesheet" href="assets/css/site.css?v={v_css}">
 </head>
 <body{body_attrs}>
 <main id="main">
@@ -50,11 +51,16 @@ TEMPLATE = """<!doctype html>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/MotionPathPlugin.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
-{lib_js}<script src="assets/js/config.js"></script>
-<script src="assets/js/core.js"></script>
+{lib_js}<script src="assets/js/config.js?v={v_cfg}"></script>
+<script src="assets/js/core.js?v={v_core}"></script>
 {scripts}</body>
 </html>
 """
+
+
+def ver(rel):
+    """Empreinte du fichier, ajoutée en ?v= pour que les navigateurs rechargent les nouvelles versions."""
+    return hashlib.md5((ROOT / rel).read_bytes()).hexdigest()[:8]
 
 
 def build():
@@ -76,7 +82,8 @@ def build():
             lib_js="".join(LIBS[l][1] + "\n" for l in libs),
             body_attrs=body_attrs,
             content=content.strip(),
-            scripts="".join(f'<script src="assets/js/{s}"></script>\n' for s in meta.get("scripts", [])),
+            scripts="".join(f'<script src="assets/js/{s}?v={ver("assets/js/" + s)}"></script>\n' for s in meta.get("scripts", [])),
+            v_css=ver("assets/css/site.css"), v_cfg=ver("assets/js/config.js"), v_core=ver("assets/js/core.js"),
         )
         (ROOT / src.name).write_text(page, encoding="utf-8")
         count += 1

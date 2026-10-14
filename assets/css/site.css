@@ -623,13 +623,11 @@ body.header-hidden .subnav { top: 0; }
 /* ==========================================================================
    Terrain complet (héros) et diaporama
    ========================================================================== */
-.court { position: absolute; z-index: -1; inset: calc(var(--header-h) - 6px) 0 6px; pointer-events: none; }
+.court { position: absolute; z-index: -1; inset: 0; pointer-events: none; }
 .court-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-.court-v { display: none; }
-@media (max-width: 760px) { .court-h { display: none; } .court-v { display: block; } .court { inset: calc(var(--header-h) - 6px) 0 6px; } }
-.court-svg .ln { fill: none; stroke: var(--court-line); stroke-width: 2.6; stroke-linecap: square; }
+.court-svg .ln { fill: none; stroke: var(--court-line); stroke-width: 1.4; stroke-linecap: square; }
 .court-svg .ln-net { stroke: rgba(227, 162, 26, .6); stroke-width: 3; stroke-dasharray: 2 7; vector-effect: non-scaling-stroke; }
-.page-hero .court { z-index: 0; inset: calc(var(--header-h) - 10px) 0 4px; }
+.page-hero .court { z-index: 0; inset: 0; }
 .page-hero .wrap { position: relative; z-index: 1; }
 .page-hero 
 .hero-show { position: relative; width: min(100%, 460px); justify-self: center; }
@@ -669,6 +667,3 @@ body.header-hidden .subnav { top: 0; }
 .hero .lead { max-width: 46ch; }
 .show-frame { max-height: 58vh; }
 .hero-scroll { bottom: 14px; }
-/* Sur l'accueil, le terrain passe aussi par-dessus le diaporama : il reste visible en entier */
-.hero .court { z-index: 3; }
-.hero .court-svg .ln { stroke: rgba(255, 255, 255, .3); }

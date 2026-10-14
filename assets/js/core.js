@@ -46,30 +46,21 @@
     shop: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16l-1.5 12a2 2 0 0 1-2 1.8h-9a2 2 0 0 1-2-1.8z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/></svg>'
   };
 
-  /* Terrain de badminton complet (dimensions officielles en cm : 1340 × 610), incliné de 14°.
-     La zone d'affichage englobe tout le terrain tourné : aucune ligne n'est coupée.
-     Deux orientations : paysage sur grand écran, portrait sur mobile. */
-  function courtSVG(vertical) {
-    const L = 1340, W = 610, H2 = L / 2, NET = 44, ANGLE = -14;
-    const P = (x, y) => (vertical ? [y, x] : [x, y]);
-    const line = (x1, y1, x2, y2, cls = 'ln') => { const [a, b] = P(x1, y1), [c, d] = P(x2, y2); return `<line class="${cls}" x1="${a}" y1="${b}" x2="${c}" y2="${d}"/>`; };
-    const [rw, rh] = vertical ? [W, L] : [L, W];
-    const cx = rw / 2, cy = rh / 2;
-    /* boîte englobante du terrain tourné (filet compris) + marge */
-    const r = Math.abs(ANGLE) * Math.PI / 180, ew = vertical ? rw + 2 * NET : rw, eh = vertical ? rh : rh + 2 * NET;
-    const bw = ew * Math.cos(r) + eh * Math.sin(r) + 40, bh = ew * Math.sin(r) + eh * Math.cos(r) + 40;
-    return `<svg class="court-svg ${vertical ? 'court-v' : 'court-h'}" viewBox="${(cx - bw / 2).toFixed(1)} ${(cy - bh / 2).toFixed(1)} ${bw.toFixed(1)} ${bh.toFixed(1)}" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-      <g transform="rotate(${ANGLE} ${cx} ${cy})">
-      <rect class="ln" x="0" y="0" width="${rw}" height="${rh}"/>
-      ${line(0, 46, L, 46)}${line(0, W - 46, L, W - 46)}
-      ${line(76, 0, 76, W)}${line(L - 76, 0, L - 76, W)}
-      ${line(H2 - 198, 0, H2 - 198, W)}${line(H2 + 198, 0, H2 + 198, W)}
-      ${line(0, W / 2, H2 - 198, W / 2)}${line(H2 + 198, W / 2, L, W / 2)}
-      ${line(H2, -NET, H2, W + NET, 'ln-net')}
-      </g>
-    </svg>`;
+  /* Terrain de badminton (dimensions officielles en cm : 1340 × 610), incliné de 14° et zoomé,
+     en fond de l'en-tête. Les lignes sont dessinées sans « non-scaling-stroke » : la longueur
+     des tirets d'animation correspond ainsi exactement à celle des lignes, qui se tracent en entier. */
+  function courtSVG() {
+    return `<svg class="court-svg" viewBox="0 0 1340 610" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <g transform="translate(670 305) rotate(-14) scale(1.25) translate(-670 -305)">
+      <rect class="ln" x="0" y="0" width="1340" height="610"/>
+      <line class="ln" x1="0" y1="46" x2="1340" y2="46"/><line class="ln" x1="0" y1="564" x2="1340" y2="564"/>
+      <line class="ln" x1="76" y1="0" x2="76" y2="610"/><line class="ln" x1="1264" y1="0" x2="1264" y2="610"/>
+      <line class="ln" x1="472" y1="0" x2="472" y2="610"/><line class="ln" x1="868" y1="0" x2="868" y2="610"/>
+      <line class="ln" x1="0" y1="305" x2="472" y2="305"/><line class="ln" x1="868" y1="305" x2="1340" y2="305"/>
+      <line class="ln-net" x1="670" y1="-40" x2="670" y2="650"/>
+    </g></svg>`;
   }
-  const COURT = `<div class="court" aria-hidden="true">${courtSVG(false)}${courtSVG(true)}</div>`;
+  const COURT = `<div class="court" aria-hidden="true">${courtSVG()}</div>`;
 
   /* ---------- navigation ---------- */
   const NAV = [

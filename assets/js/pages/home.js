@@ -13,7 +13,6 @@
     const { gsap } = window;
     const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
     tl.from('#hero-title .line > span', { yPercent: 115, rotate: 4, duration: 1.1, stagger: 0.11 }, 0.15)
-      .from('.hero-badge', { y: -20, opacity: 0, duration: 0.8 }, 0.1)
       .from('.hero .lead', { y: 30, opacity: 0, duration: 0.9 }, 0.55)
       .from('.hero-ctas > *', { y: 30, opacity: 0, duration: 0.8, stagger: 0.08 }, 0.65)
       .fromTo('#show-frame', { clipPath: 'inset(0% 0% 0% 100% round 24px)' }, { clipPath: 'inset(0% 0% 0% 0% round 24px)', duration: 1.3, ease: 'expo.inOut', clearProps: 'clipPath' }, 0.5)

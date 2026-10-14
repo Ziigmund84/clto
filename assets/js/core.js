@@ -49,18 +49,22 @@
   /* Terrain de badminton (dimensions officielles en cm : 1340 × 610), incliné de 14° et zoomé,
      en fond de l'en-tête. Les lignes sont dessinées sans « non-scaling-stroke » : la longueur
      des tirets d'animation correspond ainsi exactement à celle des lignes, qui se tracent en entier. */
-  function courtSVG() {
-    return `<svg class="court-svg" viewBox="0 0 1340 610" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-    <g transform="translate(670 305) rotate(-14) scale(1.25) translate(-670 -305)">
-      <rect class="ln" x="0" y="0" width="1340" height="610"/>
-      <line class="ln" x1="0" y1="46" x2="1340" y2="46"/><line class="ln" x1="0" y1="564" x2="1340" y2="564"/>
-      <line class="ln" x1="76" y1="0" x2="76" y2="610"/><line class="ln" x1="1264" y1="0" x2="1264" y2="610"/>
-      <line class="ln" x1="472" y1="0" x2="472" y2="610"/><line class="ln" x1="868" y1="0" x2="868" y2="610"/>
-      <line class="ln" x1="0" y1="305" x2="472" y2="305"/><line class="ln" x1="868" y1="305" x2="1340" y2="305"/>
-      <line class="ln-net" x1="670" y1="-40" x2="670" y2="650"/>
+  function courtSVG(vertical) {
+    /* en portrait (mobile), le terrain est dessiné debout pour rester lisible */
+    const P = (x, y) => (vertical ? [y, x] : [x, y]);
+    const ln = (x1, y1, x2, y2, cls = 'ln') => { const [a, b] = P(x1, y1), [c, d] = P(x2, y2); return `<line class="${cls}" x1="${a}" y1="${b}" x2="${c}" y2="${d}"/>`; };
+    const [w, h] = vertical ? [610, 1340] : [1340, 610];
+    return `<svg class="court-svg ${vertical ? 'court-v' : 'court-h'}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <g transform="translate(${w / 2} ${h / 2}) rotate(-14) scale(${vertical ? 1.08 : 1.25}) translate(${-w / 2} ${-h / 2})">
+      <rect class="ln" x="0" y="0" width="${w}" height="${h}"/>
+      ${ln(0, 46, 1340, 46)}${ln(0, 564, 1340, 564)}
+      ${ln(76, 0, 76, 610)}${ln(1264, 0, 1264, 610)}
+      ${ln(472, 0, 472, 610)}${ln(868, 0, 868, 610)}
+      ${ln(0, 305, 472, 305)}${ln(868, 305, 1340, 305)}
+      ${ln(670, -40, 670, 650, 'ln-net')}
     </g></svg>`;
   }
-  const COURT = `<div class="court" aria-hidden="true">${courtSVG()}</div>`;
+  const COURT = `<div class="court" aria-hidden="true">${courtSVG(false)}${courtSVG(true)}</div>`;
 
   /* ---------- navigation ---------- */
   const NAV = [

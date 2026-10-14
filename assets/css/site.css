@@ -667,3 +667,13 @@ body.header-hidden .subnav { top: 0; }
 .hero .lead { max-width: 46ch; }
 .show-frame { max-height: 58vh; }
 .hero-scroll { bottom: 14px; }
+
+/* Pas de débordement horizontal (bande blanche sur iPhone) */
+html, body { overflow-x: clip; }
+main, .site-footer { overflow-x: clip; }
+
+/* Terrain : debout sur mobile, lignes un peu plus visibles */
+.court-v { display: none; }
+@media (max-width: 760px) { .hero .court-h { display: none; } .hero .court-v { display: block; } }
+.hero .court-svg .ln { stroke: rgba(255, 255, 255, .38); }
+.court-v .ln { stroke-width: 2; }

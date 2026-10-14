@@ -194,7 +194,18 @@
     const alert = S('alert');
     qsa('[data-alert]').forEach((el) => {
       if (alert && alert.enabled && alert.text) {
-        el.innerHTML = `<div class="alert-band" role="status"><div class="wrap">${I.alert}<div><strong>${esc(alert.title || 'Information')}</strong> — ${esc(alert.text)}</div></div></div>`;
+        let closed = false; try { closed = sessionStorage.getItem('clto-alert') === alert.text; } catch (e) { /* stockage indisponible */ }
+        if (closed) return;
+        const onPlanning = current === 'pratiquer.html';
+        el.innerHTML = `<div class="wrap"><div class="notice" role="status">
+          <span class="notice-ico" aria-hidden="true">!</span>
+          <div class="notice-body"><b>${esc(alert.title || 'Information')}</b><p class="is-clamped">${esc(alert.text)}</p><button class="notice-more" type="button" aria-expanded="false">Lire la suite</button></div>
+          ${onPlanning ? '' : '<a class="btn btn-small" href="pratiquer.html#planning">Voir les créneaux</a>'}
+          <button class="notice-close" type="button" aria-label="Masquer ce message">×</button></div></div>`;
+        const more = el.querySelector('.notice-more'), para = el.querySelector('.notice-body p');
+        requestAnimationFrame(() => { if (para.scrollHeight <= para.clientHeight + 2) more.hidden = true; });
+        more.addEventListener('click', () => { const open = para.classList.toggle('is-clamped') === false; more.setAttribute('aria-expanded', String(open)); more.textContent = open ? 'Réduire' : 'Lire la suite'; window.ScrollTrigger && window.ScrollTrigger.refresh(); });
+        el.querySelector('.notice-close').addEventListener('click', () => { try { sessionStorage.setItem('clto-alert', alert.text); } catch (e) { /* rien */ } el.innerHTML = ''; window.ScrollTrigger && window.ScrollTrigger.refresh(); });
       }
     });
   }

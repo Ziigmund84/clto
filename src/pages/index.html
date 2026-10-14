@@ -14,14 +14,28 @@
         <a class="btn btn-ghost" href="pratiquer.html">Voir les créneaux</a>
       </div>
     </div>
-    <div class="hero-stack" aria-hidden="true">
-      <span class="hero-tag">2 essais offerts</span>
-      <figure class="hero-photo p3"><img data-hero-img="image3" src="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/clto-media/import/Capture_d_ecran_2026_08_05_164101_509969ad8b.webp" alt=""></figure>
-      <figure class="hero-photo p1"><img data-hero-img="image" src="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/clto-media/import/Championnar_Ligue_26_4b4ce1d587.webp" alt=""></figure>
-      <figure class="hero-photo p2"><img data-hero-img="image2" src="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/clto-media/import/26_27_Affiche_N2_fa762ae830.webp" alt=""></figure>
+    <div class="hero-show" id="hero-show" aria-roledescription="carrousel" aria-label="Le club en images">
+      <div class="show-frame" id="show-frame">
+        <figure class="slide is-active" aria-roledescription="diapositive" aria-label="1 sur 4">
+          <img src="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/clto-media/import/Championnar_Ligue_26_4b4ce1d587.webp" alt="" fetchpriority="high">
+          <figcaption><span class="slide-label">Compétition</span><a href="galerie.html">Championnat de Ligue séniors 2026</a></figcaption>
+        </figure>
+        <figure class="slide" aria-roledescription="diapositive" aria-label="2 sur 4" aria-hidden="true">
+          <img src="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/clto-media/import/26_27_Affiche_N2_fa762ae830.webp" alt="" loading="lazy">
+          <figcaption><span class="slide-label">Nationale 2</span><a href="interclubs.html">Les Bleus reçoivent au gymnase Chardon</a></figcaption>
+        </figure>
+        <figure class="slide" aria-roledescription="diapositive" aria-label="3 sur 4" aria-hidden="true">
+          <img src="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/clto-media/import/Capture_d_ecran_2026_08_05_164101_509969ad8b.webp" alt="" loading="lazy">
+          <figcaption><span class="slide-label">École 4 étoiles</span><a href="publics.html#jeunes">Nos jeunes au championnat de Ligue</a></figcaption>
+        </figure>
+        <figure class="slide" aria-roledescription="diapositive" aria-label="4 sur 4" aria-hidden="true">
+          <img src="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/clto-media/import/20240507_120525_a2487041e8.webp" alt="" loading="lazy">
+          <figcaption><span class="slide-label">60 ans et +</span><a href="publics.html#vieilles-plumes">Les Vieilles Plumes, deux fois par semaine</a></figcaption>
+        </figure>
+      </div>
+      <div class="show-bars" id="show-bars"><button type="button" class="is-active" aria-label="Voir la photo 1"><i></i></button><button type="button" class="" aria-label="Voir la photo 2"><i></i></button><button type="button" class="" aria-label="Voir la photo 3"><i></i></button><button type="button" class="" aria-label="Voir la photo 4"><i></i></button></div>
     </div>
   </div>
-  <div id="hero-shuttle" data-shuttle></div>
   <a class="hero-scroll" href="#chiffres"><i></i>Découvrir</a>
 </section>
 
@@ -146,7 +160,7 @@
 
 <section class="section">
   <div class="wrap">
-    <div class="cta-band" data-shuttle>
+    <div class="cta-band">
       <h2 data-cms="home.cta.titre">Deux séances d'essai, c'est offert</h2>
       <p data-cms="home.cta.texte">Venez sur le créneau de votre choix, présentez-vous à l'entraîneur ou à l'ouvreur, on vous prête une raquette. Il ne reste qu'à jouer.</p>
       <div class="btn-row"><a class="btn btn-gold" href="adherer.html">S'inscrire</a><a class="btn btn-ghost" href="pratiquer.html">Choisir un créneau</a></div>

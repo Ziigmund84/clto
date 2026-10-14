@@ -1,13 +1,13 @@
 /* Page d'accueil */
 (function () {
-  const { sb, esc, qs, qsa, S, I, fmtDate, parseDate, MONTHS, slugKind, reveal, reduceMotion, todayISO, SHUTTLE_ICON, initials } = window.CLTO;
+  const { sb, esc, qs, qsa, S, I, fmtDate, parseDate, MONTHS, slugKind, reveal, reduceMotion, todayISO, initials } = window.CLTO;
 
   /* Bandeau défilant (rempli tout de suite pour éviter un saut) */
   const words = ['Jeu libre', 'Cours encadrés', 'Stages', 'Interclubs', 'Baby-Bad', 'Tournois', 'Vieilles Plumes', 'Convivialité'];
-  const run = words.map((w) => `<span>${w}${SHUTTLE_ICON}</span>`).join('');
+  const run = words.map((w) => `<span>${w}<i class="tick-dot"></i></span>`).join('');
   qs('#ticker').innerHTML = run + run;
 
-  /* Animation d'ouverture : les lignes du titre montent, le volant traverse l'écran */
+  /* Animation d'ouverture : les lignes du titre montent, le diaporama s'ouvre en balayage */
   function heroIntro() {
     if (!window.gsap || reduceMotion) return;
     const { gsap } = window;
@@ -16,28 +16,54 @@
       .from('.hero-badge', { y: -20, opacity: 0, duration: 0.8 }, 0.1)
       .from('.hero .lead', { y: 30, opacity: 0, duration: 0.9 }, 0.55)
       .from('.hero-ctas > *', { y: 30, opacity: 0, duration: 0.8, stagger: 0.08 }, 0.65)
-      .from('.hero-photo.p1', { y: 120, rotate: -14, opacity: 0, duration: 1.3 }, 0.35)
-      .from('.hero-photo.p2', { x: 140, rotate: 22, opacity: 0, duration: 1.3 }, 0.5)
-      .from('.hero-photo.p3', { x: -100, rotate: -10, opacity: 0, duration: 1.3 }, 0.6)
-      .from('.hero-tag', { scale: 0, rotate: -40, duration: 0.9, ease: 'back.out(2.2)' }, 1.1);
-
-    const shuttle = qs('#hero-shuttle .shuttle');
-    if (shuttle && window.MotionPathPlugin) {
-      const W = window.innerWidth, H = window.innerHeight;
-      /* trajectoire d'un dégagé : on part hors écran à gauche, on monte, on retombe près des photos */
-      tl.fromTo(shuttle, { opacity: 1 }, {
-        duration: 2.1, ease: 'power1.inOut',
-        motionPath: { path: [{ x: 0, y: H * 0.25 }, { x: W * 0.32, y: -H * 0.18 }, { x: W * 0.62, y: -H * 0.05 }, { x: W * 0.8, y: H * 0.18 }], curviness: 1.4, autoRotate: 90 }
-      }, 0.2);
-      tl.to(shuttle, { y: '-=14', rotate: '+=10', duration: 1.6, ease: 'sine.inOut', yoyo: true, repeat: -1 });
-      /* au défilement, le volant poursuit sa course vers le tableau d'affichage */
-      gsap.to('#hero-shuttle', { y: () => window.innerHeight * 0.9, x: () => -window.innerWidth * 0.35, rotate: 140, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1 } });
-    }
-    /* parallaxe des photos */
-    gsap.to('.hero-photo.p1', { yPercent: -10, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
-    gsap.to('.hero-photo.p2', { yPercent: -28, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
-    gsap.to('.hero-photo.p3', { yPercent: -4, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+      .fromTo('#show-frame', { clipPath: 'inset(0% 0% 0% 100% round 24px)' }, { clipPath: 'inset(0% 0% 0% 0% round 24px)', duration: 1.3, ease: 'expo.inOut', clearProps: 'clipPath' }, 0.5)
+      .from('#show-frame .slide.is-active img', { scale: 1.3, duration: 1.8 }, 0.5)
+      .from('#show-bars', { opacity: 0, y: 10, duration: 0.6 }, 1.4);
+    gsap.to('.hero-show', { yPercent: -12, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
     gsap.to('.hero-grid', { opacity: 0.25, y: 80, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'center top', end: 'bottom top', scrub: true } });
+  }
+
+  /* Diaporama du héros : défilement automatique, barres de progression cliquables */
+  const DELAY = 6000;
+  function slideshow() {
+    const frame = qs('#show-frame'), bars = qs('#show-bars');
+    const h = S('hero') || {};
+    let slides = Array.isArray(h.slides) ? h.slides.filter((x) => x && x.image) : [];
+    if (!slides.length) slides = ['image', 'image2', 'image3'].filter((k) => h[k]).map((k) => ({ image: h[k] }));
+    if (slides.length) {
+      frame.innerHTML = slides.map((sl, i) => `<figure class="slide${i === 0 ? ' is-active' : ''}" aria-roledescription="diapositive" aria-label="${i + 1} sur ${slides.length}"${i ? ' aria-hidden="true"' : ''}>
+        <img src="${esc(sl.image)}" alt="" ${i ? 'loading="lazy"' : 'fetchpriority="high"'}>
+        ${sl.title || sl.label ? `<figcaption>${sl.label ? `<span class="slide-label">${esc(sl.label)}</span>` : ''}${sl.title ? (sl.link ? `<a href="${esc(sl.link)}">${esc(sl.title)}</a>` : `<b>${esc(sl.title)}</b>`) : ''}</figcaption>` : ''}</figure>`).join('');
+      bars.innerHTML = slides.map((_, i) => `<button type="button"${i === 0 ? ' class="is-active"' : ''} aria-label="Voir la photo ${i + 1}"><i></i></button>`).join('');
+    }
+    const figs = qsa('.slide', frame), btns = qsa('button', bars);
+    if (figs.length < 2) { bars.hidden = true; return; }
+    let cur = 0, timer = null, paused = false, startedAt = 0, remaining = DELAY;
+    const show = (n) => {
+      if (n === cur) return;
+      figs.forEach((f) => f.classList.remove('is-prev'));
+      figs[cur].classList.add('is-prev'); figs[cur].classList.remove('is-active'); figs[cur].setAttribute('aria-hidden', 'true');
+      cur = (n + figs.length) % figs.length;
+      const f = figs[cur];
+      f.classList.remove('is-active'); void f.offsetWidth; f.classList.add('is-active'); f.removeAttribute('aria-hidden');
+      btns.forEach((b, i) => { b.classList.toggle('is-active', i === cur); b.classList.toggle('is-done', i < cur); });
+      restart();
+    };
+    const tick = () => show(cur + 1);
+    const restart = () => { clearTimeout(timer); remaining = DELAY; startedAt = Date.now(); bars.style.setProperty('--dur', DELAY + 'ms'); bars.classList.remove('is-paused'); if (!paused && !reduceMotion) timer = setTimeout(tick, DELAY); };
+    const pause = () => { if (paused) return; paused = true; clearTimeout(timer); remaining -= Date.now() - startedAt; bars.classList.add('is-paused'); };
+    const resume = () => { if (!paused) return; paused = false; startedAt = Date.now(); bars.classList.remove('is-paused'); if (!reduceMotion) timer = setTimeout(tick, Math.max(300, remaining)); };
+    btns.forEach((b, i) => b.addEventListener('click', () => show(i)));
+    const box = qs('#hero-show');
+    box.addEventListener('mouseenter', pause); box.addEventListener('mouseleave', resume);
+    box.addEventListener('focusin', pause); box.addEventListener('focusout', resume);
+    document.addEventListener('visibilitychange', () => (document.hidden ? pause() : resume()));
+    /* glisser du doigt sur mobile */
+    let x0 = null;
+    frame.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
+    frame.addEventListener('touchend', (e) => { if (x0 == null) return; const dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 40) show(cur + (dx < 0 ? 1 : -1)); x0 = null; });
+    if (reduceMotion) bars.classList.add('is-paused');
+    restart();
   }
 
   /* Panneaux des publics : défilement horizontal épinglé sur grand écran */
@@ -63,7 +89,6 @@
       }
     }
     if (h.text) qs('[data-hero-text]').textContent = h.text;
-    ['image', 'image2', 'image3'].forEach((k) => { if (h[k]) qs(`[data-hero-img="${k}"]`).src = h[k]; });
   }
 
   function scoreboard() {
@@ -139,6 +164,7 @@
 
   window.CLTO.ready.then(async () => {
     hero();
+    slideshow();
     heroIntro();
     scoreboard();
     president();

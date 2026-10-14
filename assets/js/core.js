@@ -46,28 +46,27 @@
     shop: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16l-1.5 12a2 2 0 0 1-2 1.8h-9a2 2 0 0 1-2-1.8z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/></svg>'
   };
 
-  /* Volant de badminton (motif récurrent) */
-  const SHUTTLE = `<svg class="shuttle" viewBox="0 0 120 120" aria-hidden="true">
-    <defs><linearGradient id="fth" x1="0" x2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dfe9f6"/></linearGradient></defs>
-    <g transform="rotate(-35 60 60)">
-      <path d="M38 18 L82 18 L72 74 L48 74 Z" fill="url(#fth)" stroke="#0a2457" stroke-width="2.5" stroke-linejoin="round"/>
-      <path d="M48 18 L54 74 M60 18 L60 74 M72 18 L66 74" stroke="#9fb5d4" stroke-width="2"/>
-      <path d="M40 34 H80 M43 50 H77" stroke="#9fb5d4" stroke-width="2"/>
-      <rect x="47" y="72" width="26" height="8" rx="2" fill="#e3a21a" stroke="#0a2457" stroke-width="2.5"/>
-      <path d="M47 80 Q47 102 60 102 Q73 102 73 80 Z" fill="#ffffff" stroke="#0a2457" stroke-width="2.5"/>
-    </g></svg>`;
-  const SHUTTLE_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><g transform="rotate(-30 12 12)"><path d="M7 3h10l-2 11H9z"/><path d="M9 14h6v2H9z"/><path d="M9 16q0 5 3 5t3-5"/></g></svg>';
-
-  /* Terrain de badminton en plan, dessiné en lignes (proportions officielles 13,40 × 6,10 m) */
-  const COURT = `<svg class="court-svg" viewBox="0 0 1340 610" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-    <g transform="translate(670 305) rotate(-14) scale(1.25) translate(-670 -305)">
-      <rect class="ln" x="0" y="0" width="1340" height="610"/>
-      <line class="ln" x1="0" y1="46" x2="1340" y2="46"/><line class="ln" x1="0" y1="564" x2="1340" y2="564"/>
-      <line class="ln" x1="76" y1="0" x2="76" y2="610"/><line class="ln" x1="1264" y1="0" x2="1264" y2="610"/>
-      <line class="ln" x1="472" y1="0" x2="472" y2="610"/><line class="ln" x1="868" y1="0" x2="868" y2="610"/>
-      <line class="ln" x1="0" y1="305" x2="472" y2="305"/><line class="ln" x1="868" y1="305" x2="1340" y2="305"/>
-      <line class="ln ln-net" x1="670" y1="-40" x2="670" y2="650"/>
-    </g></svg>`;
+  /* Terrain de badminton complet, en plan (dimensions officielles en cm : 1340 × 610).
+     Deux orientations : paysage sur grand écran, portrait sur mobile. */
+  function courtSVG(vertical) {
+    const L = 1340, W = 610, H2 = L / 2;
+    const P = (x, y) => (vertical ? [y, x] : [x, y]);
+    const line = (x1, y1, x2, y2, cls = 'ln') => { const [a, b] = P(x1, y1), [c, d] = P(x2, y2); return `<line class="${cls}" x1="${a}" y1="${b}" x2="${c}" y2="${d}"/>`; };
+    const vb = vertical ? `-70 -40 ${W + 140} ${L + 80}` : `-40 -70 ${L + 80} ${W + 140}`;
+    const [rw, rh] = vertical ? [W, L] : [L, W];
+    const [n1x, n1y] = P(H2, -34), [n2x, n2y] = P(H2, W + 34);
+    return `<svg class="court-svg ${vertical ? 'court-v' : 'court-h'}" viewBox="${vb}" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+      <rect class="court-floor" x="0" y="0" width="${rw}" height="${rh}"/>
+      <rect class="ln" x="0" y="0" width="${rw}" height="${rh}"/>
+      ${line(0, 46, L, 46)}${line(0, W - 46, L, W - 46)}
+      ${line(76, 0, 76, W)}${line(L - 76, 0, L - 76, W)}
+      ${line(H2 - 198, 0, H2 - 198, W)}${line(H2 + 198, 0, H2 + 198, W)}
+      ${line(0, W / 2, H2 - 198, W / 2)}${line(H2 + 198, W / 2, L, W / 2)}
+      <g class="net">${line(H2, -34, H2, W + 34, 'net-band')}${line(H2, -34, H2, W + 34, 'net-mesh')}
+        <circle class="post" cx="${n1x}" cy="${n1y}" r="9"/><circle class="post" cx="${n2x}" cy="${n2y}" r="9"/></g>
+    </svg>`;
+  }
+  const COURT = `<div class="court" aria-hidden="true">${courtSVG(false)}${courtSVG(true)}</div>`;
 
   /* ---------- navigation ---------- */
   const NAV = [
@@ -205,7 +204,6 @@
   /* ---------- décors ---------- */
   function decorate() {
     qsa('[data-court]').forEach((el) => el.insertAdjacentHTML('afterbegin', COURT));
-    qsa('[data-shuttle]').forEach((el) => el.insertAdjacentHTML('beforeend', SHUTTLE));
   }
 
   /* ---------- animations ---------- */
@@ -230,12 +228,20 @@
       }));
     }
 
-    /* lignes du terrain qui se tracent */
+    /* lignes du terrain qui se tracent, puis le filet se tend */
     qsa('.court-svg').forEach((svg) => {
       const lines = qsa('.ln', svg);
-      lines.forEach((l) => { const len = l.getTotalLength ? l.getTotalLength() : 1500; l.style.strokeDasharray = l.classList.contains('ln-net') ? '' : len; l.style.strokeDashoffset = l.classList.contains('ln-net') ? 0 : len; });
-      gsap.to(lines.filter((l) => !l.classList.contains('ln-net')), { strokeDashoffset: 0, duration: 1.8, ease: 'power2.inOut', stagger: 0.08, delay: 0.2 });
-      gsap.from(svg.querySelector('.ln-net'), { opacity: 0, duration: 1, delay: 1.4 });
+      lines.forEach((l) => { const len = l.getTotalLength ? l.getTotalLength() : 2000; l.style.strokeDasharray = len; l.style.strokeDashoffset = len; });
+      const tl = gsap.timeline({ delay: 0.15 });
+      tl.from(svg.querySelector('.court-floor'), { opacity: 0, duration: 1.2 }, 0)
+        .to(lines, { strokeDashoffset: 0, duration: 1.4, ease: 'power2.inOut', stagger: 0.07 }, 0)
+        .from(qsa('.post', svg), { scale: 0, transformOrigin: 'center', duration: 0.5, ease: 'back.out(3)', stagger: 0.1 }, 1.1)
+        .from(qsa('.net line', svg), { opacity: 0, duration: 0.6 }, 1.25);
+    });
+    /* au défilement, la caméra bascule : le terrain se couche en perspective */
+    qsa('[data-court]').forEach((host) => {
+      const c = host.querySelector('.court');
+      if (c) gsap.to(c, { rotateX: 48, transformPerspective: 1400, scale: 1.08, yPercent: 8, ease: 'none', scrollTrigger: { trigger: host, start: 'top top', end: 'bottom top', scrub: true } });
     });
 
     /* titre d'en-tête de page : lettres qui rebondissent */
@@ -246,10 +252,6 @@
       gsap.from(qsa('.w', h), { yPercent: 110, rotate: 6, duration: 0.9, ease: 'expo.out', stagger: 0.06, delay: 0.1 });
     });
     qsa('.page-hero .lead, .page-hero .btn-row').forEach((el, i) => gsap.from(el, { y: 24, opacity: 0, duration: 0.8, delay: 0.45 + i * 0.1, ease: 'power3.out' }));
-    qsa('.page-hero .shuttle').forEach((s) => {
-      gsap.fromTo(s, { x: -600, y: 160, rotate: -80, opacity: 0 }, { x: 0, y: 0, rotate: 0, opacity: 1, duration: 1.6, ease: 'power3.out', delay: 0.3 });
-      gsap.to(s, { y: -18, rotate: 8, duration: 2.4, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 1.9 });
-    });
 
     /* apparitions */
     document.documentElement.classList.add('reveal-ready');
@@ -260,11 +262,6 @@
       const end = parseFloat(el.dataset.count) || 0;
       const obj = { v: 0 };
       gsap.to(obj, { v: end, duration: 1.8, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 88%', once: true }, onUpdate: () => { el.textContent = Math.round(obj.v); } });
-    });
-
-    /* volant du bandeau d'appel */
-    qsa('.cta-band .shuttle').forEach((s) => {
-      gsap.fromTo(s, { x: -500, y: -200, rotate: -120 }, { x: 0, y: 0, rotate: 0, ease: 'none', scrollTrigger: { trigger: s.closest('.cta-band'), start: 'top bottom', end: 'center center', scrub: 1 } });
     });
   }
 
@@ -305,7 +302,7 @@
   }
 
   /* Accès public aux fonctions communes */
-  window.CLTO = { sb, esc, fmtDate, fmtRange, parseDate, MONTHS, MONTHS_LONG, DAYS, initials, slugKind, qs, qsa, I, SHUTTLE, SHUTTLE_ICON, COURT, S, settings, reveal, reduceMotion, todayISO, MEDIA };
+  window.CLTO = { sb, esc, fmtDate, fmtRange, parseDate, MONTHS, MONTHS_LONG, DAYS, initials, slugKind, qs, qsa, I, COURT, S, settings, reveal, reduceMotion, todayISO, MEDIA };
 
   /* Démarrage */
   const ready = (async () => {

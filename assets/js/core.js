@@ -46,24 +46,27 @@
     shop: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16l-1.5 12a2 2 0 0 1-2 1.8h-9a2 2 0 0 1-2-1.8z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/></svg>'
   };
 
-  /* Terrain de badminton complet, en plan (dimensions officielles en cm : 1340 × 610).
+  /* Terrain de badminton complet (dimensions officielles en cm : 1340 × 610), incliné de 14°.
+     La zone d'affichage englobe tout le terrain tourné : aucune ligne n'est coupée.
      Deux orientations : paysage sur grand écran, portrait sur mobile. */
   function courtSVG(vertical) {
-    const L = 1340, W = 610, H2 = L / 2;
+    const L = 1340, W = 610, H2 = L / 2, NET = 44, ANGLE = -14;
     const P = (x, y) => (vertical ? [y, x] : [x, y]);
     const line = (x1, y1, x2, y2, cls = 'ln') => { const [a, b] = P(x1, y1), [c, d] = P(x2, y2); return `<line class="${cls}" x1="${a}" y1="${b}" x2="${c}" y2="${d}"/>`; };
-    const vb = vertical ? `-70 -40 ${W + 140} ${L + 80}` : `-40 -70 ${L + 80} ${W + 140}`;
     const [rw, rh] = vertical ? [W, L] : [L, W];
-    const [n1x, n1y] = P(H2, -34), [n2x, n2y] = P(H2, W + 34);
-    return `<svg class="court-svg ${vertical ? 'court-v' : 'court-h'}" viewBox="${vb}" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-      <rect class="court-floor" x="0" y="0" width="${rw}" height="${rh}"/>
+    const cx = rw / 2, cy = rh / 2;
+    /* boîte englobante du terrain tourné (filet compris) + marge */
+    const r = Math.abs(ANGLE) * Math.PI / 180, ew = vertical ? rw + 2 * NET : rw, eh = vertical ? rh : rh + 2 * NET;
+    const bw = ew * Math.cos(r) + eh * Math.sin(r) + 40, bh = ew * Math.sin(r) + eh * Math.cos(r) + 40;
+    return `<svg class="court-svg ${vertical ? 'court-v' : 'court-h'}" viewBox="${(cx - bw / 2).toFixed(1)} ${(cy - bh / 2).toFixed(1)} ${bw.toFixed(1)} ${bh.toFixed(1)}" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+      <g transform="rotate(${ANGLE} ${cx} ${cy})">
       <rect class="ln" x="0" y="0" width="${rw}" height="${rh}"/>
       ${line(0, 46, L, 46)}${line(0, W - 46, L, W - 46)}
       ${line(76, 0, 76, W)}${line(L - 76, 0, L - 76, W)}
       ${line(H2 - 198, 0, H2 - 198, W)}${line(H2 + 198, 0, H2 + 198, W)}
       ${line(0, W / 2, H2 - 198, W / 2)}${line(H2 + 198, W / 2, L, W / 2)}
-      <g class="net">${line(H2, -34, H2, W + 34, 'net-band')}${line(H2, -34, H2, W + 34, 'net-mesh')}
-        <circle class="post" cx="${n1x}" cy="${n1y}" r="9"/><circle class="post" cx="${n2x}" cy="${n2y}" r="9"/></g>
+      ${line(H2, -NET, H2, W + NET, 'ln-net')}
+      </g>
     </svg>`;
   }
   const COURT = `<div class="court" aria-hidden="true">${courtSVG(false)}${courtSVG(true)}</div>`;
@@ -228,21 +231,13 @@
       }));
     }
 
-    /* lignes du terrain qui se tracent, puis le filet se tend */
+    /* lignes du terrain qui se tracent, puis le filet apparaît */
     qsa('.court-svg').forEach((svg) => {
       const lines = qsa('.ln', svg);
       const lenOf = (l) => { const n = (k) => parseFloat(l.getAttribute(k)) || 0; return l.tagName === 'rect' ? 2 * (n('width') + n('height')) : Math.hypot(n('x2') - n('x1'), n('y2') - n('y1')); };
       lines.forEach((l) => { const len = lenOf(l) + 2; l.style.strokeDasharray = len; l.style.strokeDashoffset = len; });
-      const tl = gsap.timeline({ delay: 0.15 });
-      tl.from(svg.querySelector('.court-floor'), { opacity: 0, duration: 1.2 }, 0)
-        .to(lines, { strokeDashoffset: 0, duration: 1.4, ease: 'power2.inOut', stagger: 0.07 }, 0)
-        .from(qsa('.post', svg), { scale: 0, transformOrigin: 'center', duration: 0.5, ease: 'back.out(3)', stagger: 0.1 }, 1.1)
-        .from(qsa('.net line', svg), { opacity: 0, duration: 0.6 }, 1.25);
-    });
-    /* au défilement, la caméra bascule : le terrain se couche en perspective */
-    qsa('[data-court]').forEach((host) => {
-      const c = host.querySelector('.court');
-      if (c) gsap.to(c, { rotateX: 48, transformPerspective: 1400, scale: 1.08, yPercent: 8, ease: 'none', scrollTrigger: { trigger: host, start: 'top top', end: 'bottom top', scrub: true } });
+      gsap.to(lines, { strokeDashoffset: 0, duration: 1.8, ease: 'power2.inOut', stagger: 0.08, delay: 0.2 });
+      gsap.from(svg.querySelector('.ln-net'), { opacity: 0, duration: 1, delay: 1.4 });
     });
 
     /* titre d'en-tête de page : lettres qui rebondissent */

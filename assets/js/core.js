@@ -62,7 +62,6 @@
       ${ln(472, 0, 472, 610)}${ln(868, 0, 868, 610)}
       ${ln(0, 305, 472, 305)}${ln(868, 305, 1340, 305)}
       ${ln(670, -40, 670, 650, 'ln-net')}
-      <g class="court-life" data-v="${vertical ? 1 : 0}"></g>
     </g></svg>`;
   }
   const COURT = `<div class="court" aria-hidden="true">${courtSVG(false)}${courtSVG(true)}</div>`;
@@ -268,94 +267,6 @@
     });
   }
 
-  /* Vie sur le terrain : un échange simulé. Les volants tombent d'un côté puis de l'autre ;
-     un volant dehors est marqué « OUT ». Un petit tableau tient le score d'un match en 15 points,
-     que le CLTO finit toujours par gagner. */
-  function courtLife() {
-    if (reduceMotion) return;
-    const NS = 'http://www.w3.org/2000/svg';
-    qsa('[data-court-life]').forEach((host) => {
-      const board = document.createElement('div');
-      board.className = 'match-board';
-      board.setAttribute('aria-hidden', 'true');
-      board.innerHTML = '<span class="mb-team">CLTO</span><b class="mb-a">0</b><i>–</i><b class="mb-b">0</b><span class="mb-team">Visiteur</span><em class="mb-msg"></em>';
-      host.appendChild(board);
-      const A = board.querySelector('.mb-a'), B = board.querySelector('.mb-b'), MSG = board.querySelector('.mb-msg');
-      const layers = qsa('.court-life', host);
-      const layer = () => layers.find((l) => l.closest('svg').getBoundingClientRect().width > 0);
-      const wait = (ms) => new Promise((res) => setTimeout(res, ms));
-      const rnd = (a, b) => a + Math.random() * (b - a);
-      /* coordonnées du terrain (cm) -> point SVG, selon l'orientation */
-      const P = (l, x, y) => (l.dataset.v === '1' ? [y, x] : [x, y]);
-      /* le point est-il visible à l'écran (le terrain est zoomé et déborde) ? */
-      const onScreen = (l, x, y) => {
-        const svg = l.closest('svg'), m = l.getScreenCTM(); if (!m) return false;
-        const [px, py] = P(l, x, y); const pt = svg.createSVGPoint(); pt.x = px; pt.y = py;
-        const q = pt.matrixTransform(m), r = host.getBoundingClientRect();
-        return q.x > r.left + 30 && q.x < r.right - 30 && q.y > r.top + 90 && q.y < r.bottom - 60;
-      };
-      const pick = (l, gen) => { for (let i = 0; i < 30; i++) { const c = gen(); if (onScreen(l, c[0], c[1])) return c; } return null; };
-      const add = (l, html, life) => { const g = document.createElementNS(NS, 'g'); g.innerHTML = html; const el = g.firstElementChild; l.appendChild(el); setTimeout(() => el.remove(), life); };
-      const impact = (l, x, y, out) => {
-        const [px, py] = P(l, x, y);
-        add(l, `<g class="impact${out ? ' is-out' : ''}" transform="translate(${px.toFixed(1)} ${py.toFixed(1)})"><circle class="imp-ring" r="11"/><circle class="imp-dot" r="4"/>${out ? '<text class="imp-out" x="16" y="6">OUT</text>' : ''}</g>`, out ? 2600 : 1700);
-      };
-      /* côté 0 = CLTO (gauche, x < 670), côté 1 = visiteur (droite) */
-      const inside = (side) => () => [side ? rnd(720, 1240) : rnd(100, 620), rnd(70, 540)];
-      const outside = (side) => () => {
-        const k = Math.random();
-        const x = side ? rnd(760, 1220) : rnd(120, 580);
-        if (k < 0.5) return [x, Math.random() < 0.5 ? rnd(-55, -18) : rnd(628, 665)];   /* sur le côté */
-        return [side ? rnd(1355, 1400) : rnd(-60, -15), rnd(80, 530)];                   /* trop long */
-      };
-      let a = 0, b = 0;
-      const show = () => { A.textContent = a; B.textContent = b; };
-      const point = (toClto) => {
-        if (toClto) a++; else b++;
-        show();
-        board.classList.remove('is-flash'); void board.offsetWidth; board.classList.add('is-flash');
-      };
-      (async () => {
-        await wait(2400);
-        let server = 0;
-        for (;;) {
-          const l = layer();
-          if (!l || document.hidden || host.getBoundingClientRect().bottom < 0) { await wait(1000); continue; }
-          /* le CLTO gagne toujours : on garde un avantage et on ne laisse jamais le visiteur atteindre 15 */
-          let cltoWins = Math.random() < (b >= a ? 0.68 : 0.55);
-          if (b === 14 || (b >= 12 && a < b)) cltoWins = true;
-          const shots = 3 + Math.floor(Math.random() * 7);
-          const outEnd = Math.random() < 0.4;
-          let side = 1 - server;        /* le service part de chez le serveur et tombe en face */
-          for (let i = 0; i < shots; i++) {
-            const last = i === shots - 1;
-            if (last) {
-              /* dernier volant : gagnant chez le perdant, ou dehors côté du gagnant (faute du perdant) */
-              const loser = cltoWins ? 1 : 0;
-              const c = outEnd ? pick(l, outside(1 - loser)) : pick(l, inside(loser));
-              if (c) impact(l, c[0], c[1], outEnd); else { const d = pick(l, inside(loser)); if (d) impact(l, d[0], d[1], false); }
-              break;
-            }
-            const c = pick(l, inside(side)); if (c) impact(l, c[0], c[1], false);
-            side = 1 - side;
-            await wait(rnd(650, 950));
-          }
-          await wait(700);
-          point(cltoWins);
-          server = cltoWins ? 0 : 1;
-          if (a >= 15) {
-            MSG.textContent = `Victoire du CLTO ${a}–${b} !`;
-            board.classList.add('is-win');
-            await wait(4200);
-            board.classList.remove('is-win'); MSG.textContent = '';
-            a = 0; b = 0; show(); server = 0;
-          }
-          await wait(rnd(1300, 2000));
-        }
-      })();
-    });
-  }
-
   /* Révélation des éléments marqués data-reveal (aussi appelée après un rendu dynamique) */
   function reveal(root) {
     if (!window.gsap || reduceMotion) { qsa('[data-reveal]', root).forEach((el) => { el.style.opacity = 1; }); return; }
@@ -406,7 +317,6 @@
     applySettings();
     await loadBlocks();
     animations();
-    courtLife();
     scrollspy();
   })();
   window.CLTO.ready = ready;

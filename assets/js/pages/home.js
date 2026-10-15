@@ -30,8 +30,9 @@
     if (!slides.length) slides = ['image', 'image2', 'image3'].filter((k) => h[k]).map((k) => ({ image: h[k] }));
     if (slides.length) {
       frame.innerHTML = slides.map((sl, i) => `<figure class="slide" aria-roledescription="diapositive" aria-label="${i + 1} sur ${slides.length}">
+        <span class="slide-swash" aria-hidden="true"></span><div class="slide-paint">
         <img src="${esc(sl.image)}" alt="" ${i > 1 ? 'loading="lazy"' : ''}>
-        ${sl.title || sl.label ? `<figcaption>${sl.label ? `<span class="slide-label">${esc(sl.label)}</span>` : ''}${sl.title ? (sl.link ? `<a href="${esc(sl.link)}">${esc(sl.title)}</a>` : `<b>${esc(sl.title)}</b>`) : ''}</figcaption>` : ''}</figure>`).join('');
+        ${sl.title || sl.label ? `<figcaption>${sl.label ? `<span class="slide-label">${esc(sl.label)}</span>` : ''}${sl.title ? (sl.link ? `<a href="${esc(sl.link)}">${esc(sl.title)}</a>` : `<b>${esc(sl.title)}</b>`) : ''}</figcaption>` : ''}</div></figure>`).join('');
     }
     const figs = qsa('.slide', frame);
     const N = figs.length;

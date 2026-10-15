@@ -801,3 +801,6 @@ main:has(.hero) .publics-intro { padding-top: clamp(110px, 13vw, 190px); }
 @keyframes cap-in { from { opacity: 0; transform: translateY(12px); } }
 .show-ctrl { margin-top: 18px; }
 .slide-paint { background: none; }
+/* Légende à hauteur fixe : le changement de photo ne fait plus bouger la page */
+.show-caption { height: calc(2 * clamp(1.6rem, 2.4vw, 2.1rem) + 4px); min-height: 0; margin-top: 18px; overflow: hidden; align-content: start; }
+.show-caption a, .show-caption b { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }

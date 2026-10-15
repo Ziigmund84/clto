@@ -61,7 +61,7 @@
       btns.forEach((b, i) => { b.classList.toggle('is-active', i === cur); b.classList.toggle('is-done', i < cur); });
       if (count) count.innerHTML = `<b>${String(cur + 1).padStart(2, '0')}</b> / ${String(N).padStart(2, '0')}`;
       const cap = qs('#show-caption'), fc = figs[cur].querySelector('figcaption');
-      if (cap) { cap.classList.remove('is-in'); cap.innerHTML = fc ? fc.innerHTML : ''; void cap.offsetWidth; cap.classList.add('is-in'); }
+      if (cap) { cap.classList.remove('is-in'); const t = fc && fc.querySelector('a, b'); cap.innerHTML = t ? t.outerHTML : ''; void cap.offsetWidth; cap.classList.add('is-in'); }
       if (glow) glow.style.backgroundImage = `url("${figs[cur].querySelector('img').src}")`;
     };
     const show = (n, dir) => {

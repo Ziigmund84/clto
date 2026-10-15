@@ -178,7 +178,7 @@
     hero: { label: 'Accueil : grand titre et diaporama', fields: [
       { k: 'title', l: 'Grand titre', hint: 'Séparez les lignes avec | ; la dernière ligne s\'affiche en or. Ex. : Le bad|à Orléans,|pour tous.' },
       { k: 'text', l: 'Texte d\'introduction', t: 'textarea' },
-      { k: 'slides', l: 'Photos du diaporama', t: 'list', hint: 'Elles défilent toutes les 6 secondes. Format conseillé : portrait ou carré.', sub: [{ k: 'image', l: 'Photo', t: 'image' }, { k: 'label', l: 'Étiquette', hint: 'Ex. : Nationale 2' }, { k: 'title', l: 'Légende' }, { k: 'link', l: 'Lien (facultatif)', hint: 'Ex. : interclubs.html' }] }
+      { k: 'slides', l: 'Photos du diaporama', t: 'list', hint: 'Elles défilent toutes les 6 secondes. Format conseillé : portrait ou carré.', sub: [{ k: 'image', l: 'Photo', t: 'image' }, { k: 'title', l: 'Légende' }, { k: 'link', l: 'Lien (facultatif)', hint: 'Ex. : interclubs.html' }] }
     ] },
     alert: { label: 'Bandeau d\'information', fields: [
       { k: 'enabled', l: 'Afficher le bandeau (accueil, créneaux, inscription)', t: 'bool' },

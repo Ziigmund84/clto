@@ -14,14 +14,14 @@
     const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
     tl.from('#hero-title .line > span', { yPercent: 115, rotate: 4, duration: 1.1, stagger: 0.11 }, 0.15)
       .from('.hero-ctas > *', { y: 30, opacity: 0, duration: 0.8, stagger: 0.08 }, 0.65)
-      .fromTo('#show-frame', { clipPath: 'inset(0% 0% 0% 100% round 24px)' }, { clipPath: 'inset(0% 0% 0% 0% round 24px)', duration: 1.3, ease: 'expo.inOut', clearProps: 'clipPath' }, 0.5)
-      .from('#show-frame .slide.is-active img', { scale: 1.3, duration: 1.8 }, 0.5)
-      .from('#show-bars', { opacity: 0, y: 10, duration: 0.6 }, 1.4);
+      .from('#show-frame .slide', { x: 260, y: 40, rotate: 18, opacity: 0, duration: 1.2, stagger: { each: 0.12, from: 'end' }, clearProps: 'transform,opacity' }, 0.45)
+      .from('.show-ctrl', { opacity: 0, y: 14, duration: 0.7 }, 1.3);
     gsap.to('.hero-show', { yPercent: -12, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
     gsap.to('.hero-grid', { opacity: 0.25, y: 80, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'center top', end: 'bottom top', scrub: true } });
   }
 
-  /* Diaporama du héros : défilement automatique, barres de progression cliquables */
+  /* Diaporama du héros : un paquet de cartes photo. La carte de devant s'envole,
+     la suivante avance ; défilement automatique, flèches, barres, glisser du doigt. */
   const DELAY = 6000;
   function slideshow() {
     const frame = qs('#show-frame'), bars = qs('#show-bars');
@@ -29,38 +29,81 @@
     let slides = Array.isArray(h.slides) ? h.slides.filter((x) => x && x.image) : [];
     if (!slides.length) slides = ['image', 'image2', 'image3'].filter((k) => h[k]).map((k) => ({ image: h[k] }));
     if (slides.length) {
-      frame.innerHTML = slides.map((sl, i) => `<figure class="slide${i === 0 ? ' is-active' : ''}" aria-roledescription="diapositive" aria-label="${i + 1} sur ${slides.length}"${i ? ' aria-hidden="true"' : ''}>
-        <img src="${esc(sl.image)}" alt="" ${i ? 'loading="lazy"' : 'fetchpriority="high"'}>
+      frame.innerHTML = slides.map((sl, i) => `<figure class="slide" aria-roledescription="diapositive" aria-label="${i + 1} sur ${slides.length}">
+        <img src="${esc(sl.image)}" alt="" ${i > 1 ? 'loading="lazy"' : ''}>
         ${sl.title || sl.label ? `<figcaption>${sl.label ? `<span class="slide-label">${esc(sl.label)}</span>` : ''}${sl.title ? (sl.link ? `<a href="${esc(sl.link)}">${esc(sl.title)}</a>` : `<b>${esc(sl.title)}</b>`) : ''}</figcaption>` : ''}</figure>`).join('');
-      bars.innerHTML = slides.map((_, i) => `<button type="button"${i === 0 ? ' class="is-active"' : ''} aria-label="Voir la photo ${i + 1}"><i></i></button>`).join('');
     }
-    const figs = qsa('.slide', frame), btns = qsa('button', bars);
-    if (figs.length < 2) { bars.hidden = true; return; }
+    const figs = qsa('.slide', frame);
+    const N = figs.length;
+    const ctrl = qs('.show-ctrl');
+    if (N < 2) { if (ctrl) ctrl.hidden = true; figs.forEach((f) => { f.dataset.pos = 0; }); return; }
+    bars.innerHTML = figs.map((_, i) => `<button type="button" aria-label="Voir la photo ${i + 1}"><i></i></button>`).join('');
+    const btns = qsa('button', bars);
+    const count = qs('#show-count');
+    const glow = qs('#show-glow');
     let cur = 0, timer = null, paused = false, startedAt = 0, remaining = DELAY;
-    const show = (n) => {
-      if (n === cur) return;
-      figs.forEach((f) => f.classList.remove('is-prev'));
-      figs[cur].classList.add('is-prev'); figs[cur].classList.remove('is-active'); figs[cur].setAttribute('aria-hidden', 'true');
-      cur = (n + figs.length) % figs.length;
-      const f = figs[cur];
-      f.classList.remove('is-active'); void f.offsetWidth; f.classList.add('is-active'); f.removeAttribute('aria-hidden');
+
+    const layout = (leaving = -1, dir = 1) => {
+      figs.forEach((f, i) => {
+        const rel = (i - cur + N) % N;
+        f.dataset.pos = rel < 3 ? rel : 'hidden';
+        f.classList.toggle('is-front', rel === 0);
+        f.setAttribute('aria-hidden', String(rel !== 0));
+        f.querySelectorAll('a').forEach((a) => { a.tabIndex = rel === 0 ? 0 : -1; });
+        f.classList.remove('is-leaving', 'is-leaving-back');
+      });
+      if (leaving >= 0) {
+        const lf = figs[leaving];
+        lf.classList.add(dir > 0 ? 'is-leaving' : 'is-leaving-back');
+        setTimeout(() => lf.classList.remove('is-leaving', 'is-leaving-back'), 750);
+      }
       btns.forEach((b, i) => { b.classList.toggle('is-active', i === cur); b.classList.toggle('is-done', i < cur); });
+      if (count) count.innerHTML = `<b>${String(cur + 1).padStart(2, '0')}</b> / ${String(N).padStart(2, '0')}`;
+      if (glow) glow.style.backgroundImage = `url("${figs[cur].querySelector('img').src}")`;
+    };
+    const show = (n, dir) => {
+      const next = (n + N) % N;
+      if (next === cur) return;
+      const prev = cur; cur = next;
+      layout(prev, dir ?? (n > prev ? 1 : -1));
       restart();
     };
-    const tick = () => show(cur + 1);
-    const restart = () => { clearTimeout(timer); remaining = DELAY; startedAt = Date.now(); bars.style.setProperty('--dur', DELAY + 'ms'); bars.classList.remove('is-paused'); if (!paused && !reduceMotion) timer = setTimeout(tick, DELAY); };
+    const tick = () => show(cur + 1, 1);
+    const restart = () => { clearTimeout(timer); remaining = DELAY; startedAt = Date.now(); bars.style.setProperty('--dur', DELAY + 'ms'); bars.classList.remove('is-paused'); const a = bars.querySelector('.is-active i'); if (a) { a.style.animation = 'none'; void a.offsetWidth; a.style.animation = ''; } if (!paused && !reduceMotion) timer = setTimeout(tick, DELAY); };
     const pause = () => { if (paused) return; paused = true; clearTimeout(timer); remaining -= Date.now() - startedAt; bars.classList.add('is-paused'); };
     const resume = () => { if (!paused) return; paused = false; startedAt = Date.now(); bars.classList.remove('is-paused'); if (!reduceMotion) timer = setTimeout(tick, Math.max(300, remaining)); };
+
     btns.forEach((b, i) => b.addEventListener('click', () => show(i)));
+    qs('#show-prev').addEventListener('click', () => show(cur - 1, -1));
+    qs('#show-next').addEventListener('click', () => show(cur + 1, 1));
+    frame.addEventListener('click', (e) => { const f = e.target.closest('.slide'); if (f && !f.classList.contains('is-front') && !e.target.closest('a')) show(figs.indexOf(f), 1); });
     const box = qs('#hero-show');
     box.addEventListener('mouseenter', pause); box.addEventListener('mouseleave', resume);
     box.addEventListener('focusin', pause); box.addEventListener('focusout', resume);
+    box.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight') show(cur + 1, 1); if (e.key === 'ArrowLeft') show(cur - 1, -1); });
     document.addEventListener('visibilitychange', () => (document.hidden ? pause() : resume()));
-    /* glisser du doigt sur mobile */
-    let x0 = null;
-    frame.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
-    frame.addEventListener('touchend', (e) => { if (x0 == null) return; const dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 40) show(cur + (dx < 0 ? 1 : -1)); x0 = null; });
+
+    /* la carte de devant suit légèrement la souris */
+    if (!reduceMotion && window.matchMedia('(hover: hover)').matches) {
+      frame.addEventListener('mousemove', (e) => {
+        const r = frame.getBoundingClientRect();
+        frame.style.setProperty('--rx', (((e.clientY - r.top) / r.height - 0.5) * -8).toFixed(2) + 'deg');
+        frame.style.setProperty('--ry', (((e.clientX - r.left) / r.width - 0.5) * 10).toFixed(2) + 'deg');
+      });
+      frame.addEventListener('mouseleave', () => { frame.style.setProperty('--rx', '0deg'); frame.style.setProperty('--ry', '0deg'); });
+    }
+    /* glisser du doigt : la carte suit le doigt puis s'envole */
+    let x0 = null, dx = 0;
+    frame.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; dx = 0; pause(); }, { passive: true });
+    frame.addEventListener('touchmove', (e) => { if (x0 == null) return; dx = e.touches[0].clientX - x0; figs[cur].style.setProperty('--drag', dx + 'px'); }, { passive: true });
+    frame.addEventListener('touchend', () => {
+      if (x0 == null) return;
+      figs[cur].style.removeProperty('--drag');
+      if (Math.abs(dx) > 50) show(cur + (dx < 0 ? 1 : -1), dx < 0 ? 1 : -1);
+      x0 = null; resume();
+    });
     if (reduceMotion) bars.classList.add('is-paused');
+    layout();
     restart();
   }
 

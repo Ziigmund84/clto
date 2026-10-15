@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://kdcflcvufukagdjycwww.supabase.co" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Barlow+Condensed:ital,wght@1,600;1,700;1,800&family=Big+Shoulders+Display:wght@700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/site.css?v=97a63788">
+<link rel="stylesheet" href="assets/css/site.css?v=4f6478e7">
 </head>
 <body>
 <main id="main">
@@ -34,26 +34,23 @@
       </div>
     </div>
     <div class="hero-show" id="hero-show" aria-roledescription="carrousel" aria-label="Le club en images">
+      <div class="show-glow" id="show-glow" aria-hidden="true"></div>
       <div class="show-frame" id="show-frame">
-        <figure class="slide is-active" aria-roledescription="diapositive" aria-label="1 sur 4">
-          <img src="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/clto-media/import/Championnar_Ligue_26_4b4ce1d587.webp" alt="" fetchpriority="high">
-          <figcaption><span class="slide-label">Compétition</span><a href="galerie.html">Championnat de Ligue séniors 2026</a></figcaption>
-        </figure>
-        <figure class="slide" aria-roledescription="diapositive" aria-label="2 sur 4" aria-hidden="true">
-          <img src="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/clto-media/import/26_27_Affiche_N2_fa762ae830.webp" alt="" loading="lazy">
-          <figcaption><span class="slide-label">Nationale 2</span><a href="interclubs.html">Les Bleus reçoivent au gymnase Chardon</a></figcaption>
-        </figure>
-        <figure class="slide" aria-roledescription="diapositive" aria-label="3 sur 4" aria-hidden="true">
-          <img src="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/clto-media/import/Capture_d_ecran_2026_08_05_164101_509969ad8b.webp" alt="" loading="lazy">
-          <figcaption><span class="slide-label">École 4 étoiles</span><a href="publics.html#jeunes">Nos jeunes au championnat de Ligue</a></figcaption>
-        </figure>
-        <figure class="slide" aria-roledescription="diapositive" aria-label="4 sur 4" aria-hidden="true">
-          <img src="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/clto-media/import/20240507_120525_a2487041e8.webp" alt="" loading="lazy">
-          <figcaption><span class="slide-label">60 ans et +</span><a href="publics.html#vieilles-plumes">Les Vieilles Plumes, deux fois par semaine</a></figcaption>
-        </figure>
+        <figure class="slide" data-pos="0"><img src="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/clto-media/import/Championnar_Ligue_26_4b4ce1d587.webp" alt=""><figcaption><span class="slide-label">Compétition</span><a href="galerie.html">Championnat de Ligue séniors 2026</a></figcaption></figure>
+        <figure class="slide" data-pos="1"><img src="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/clto-media/import/26_27_Affiche_N2_fa762ae830.webp" alt=""><figcaption><span class="slide-label">Nationale 2</span><a href="interclubs.html">Les Bleus reçoivent au gymnase Chardon</a></figcaption></figure>
+        <figure class="slide" data-pos="2"><img src="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/clto-media/import/Capture_d_ecran_2026_08_05_164101_509969ad8b.webp" alt="" loading="lazy"><figcaption><span class="slide-label">École 4 étoiles</span><a href="publics.html#jeunes">Nos jeunes au championnat de Ligue</a></figcaption></figure>
+        <figure class="slide" data-pos="hidden"><img src="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/clto-media/import/20240507_120525_a2487041e8.webp" alt="" loading="lazy"><figcaption><span class="slide-label">60 ans et +</span><a href="publics.html#vieilles-plumes">Les Vieilles Plumes, deux fois par semaine</a></figcaption></figure>
       </div>
-      <div class="show-bars" id="show-bars"><button type="button" class="is-active" aria-label="Voir la photo 1"><i></i></button><button type="button" class="" aria-label="Voir la photo 2"><i></i></button><button type="button" class="" aria-label="Voir la photo 3"><i></i></button><button type="button" class="" aria-label="Voir la photo 4"><i></i></button></div>
+      <div class="show-ctrl">
+        <span class="show-count" id="show-count" aria-live="polite"></span>
+        <div class="show-bars" id="show-bars"></div>
+        <div class="show-arrows">
+          <button type="button" id="show-prev" aria-label="Photo précédente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button>
+          <button type="button" id="show-next" aria-label="Photo suivante"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        </div>
+      </div>
     </div>
+  </div>
   </div>
 </section>
 
@@ -192,6 +189,6 @@
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
 <script src="assets/js/config.js?v=c8091f67"></script>
 <script src="assets/js/core.js?v=8eccf3cf"></script>
-<script src="assets/js/pages/home.js?v=afa64011"></script>
+<script src="assets/js/pages/home.js?v=48634be6"></script>
 </body>
 </html>

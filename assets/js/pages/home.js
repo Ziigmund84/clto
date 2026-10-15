@@ -14,8 +14,7 @@
     const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
     tl.from('#hero-title .line > span', { yPercent: 115, rotate: 4, duration: 1.1, stagger: 0.11 }, 0.15)
       .from('.hero-ctas > *', { y: 30, opacity: 0, duration: 0.8, stagger: 0.08 }, 0.65)
-      .from('#show-frame .slide', { x: 260, y: 40, rotate: 18, opacity: 0, duration: 1.2, stagger: { each: 0.12, from: 'end' }, clearProps: 'transform,opacity' }, 0.45)
-      .from('.show-ctrl', { opacity: 0, y: 14, duration: 0.7 }, 1.3);
+      ;
     gsap.to('.hero-show', { yPercent: -12, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
     gsap.to('.hero-grid', { opacity: 0.25, y: 80, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'center top', end: 'bottom top', scrub: true } });
   }
@@ -23,12 +22,14 @@
   /* Diaporama du héros : un paquet de cartes photo. La carte de devant s'envole,
      la suivante avance ; défilement automatique, flèches, barres, glisser du doigt. */
   const DELAY = 6000;
-  function slideshow() {
+  async function slideshow() {
     const frame = qs('#show-frame'), bars = qs('#show-bars');
     const h = S('hero') || {};
     let slides = Array.isArray(h.slides) ? h.slides.filter((x) => x && x.image) : [];
     if (!slides.length) slides = ['image', 'image2', 'image3'].filter((k) => h[k]).map((k) => ({ image: h[k] }));
-    if (slides.length) {
+    const current = qsa('.slide img', frame).map((im) => im.getAttribute('src'));
+    const same = slides.length === current.length && slides.every((sl, i) => sl.image === current[i]);
+    if (slides.length && !same) {
       frame.innerHTML = slides.map((sl, i) => `<figure class="slide" aria-roledescription="diapositive" aria-label="${i + 1} sur ${slides.length}">
         <span class="slide-swash" aria-hidden="true"></span><div class="slide-paint">
         <img src="${esc(sl.image)}" alt="" ${i > 1 ? 'loading="lazy"' : ''}></div>
@@ -36,9 +37,8 @@
     }
     const figs = qsa('.slide', frame);
     const N = figs.length;
-    frame.classList.add('is-ready');
     const ctrl = qs('.show-ctrl');
-    if (N < 2) { if (ctrl) ctrl.hidden = true; figs.forEach((f) => { f.dataset.pos = 0; }); return; }
+    if (N < 2) { if (ctrl) ctrl.hidden = true; figs.forEach((f) => { f.dataset.pos = 0; }); frame.classList.add('is-ready'); return; }
     bars.innerHTML = figs.map((_, i) => `<button type="button" aria-label="Voir la photo ${i + 1}"><i></i></button>`).join('');
     const btns = qsa('button', bars);
     const count = qs('#show-count');
@@ -108,7 +108,18 @@
     });
     if (reduceMotion) bars.classList.add('is-paused');
     layout();
+    await ready(figs);
+    frame.classList.add('is-ready');
     restart();
+  }
+
+  /* attend la 1re photo (et la 2e) ainsi que la forme « pinceau » avant d'afficher le paquet */
+  function ready(figs) {
+    const imgs = figs.slice(0, 2).map((f) => f.querySelector('img'));
+    const mask = new Image(); mask.src = 'assets/img/brush-card.png';
+    const one = (im) => (im.complete && im.naturalWidth ? Promise.resolve() : new Promise((res) => { im.addEventListener('load', res, { once: true }); im.addEventListener('error', res, { once: true }); }));
+    const all = Promise.all([...imgs.map(one), one(mask)]).then(() => Promise.all(imgs.map((im) => (im.decode ? im.decode().catch(() => {}) : null))));
+    return Promise.race([all, new Promise((res) => setTimeout(res, 2500))]);
   }
 
   /* Panneaux des publics : défilement horizontal épinglé sur grand écran */
@@ -232,8 +243,13 @@
 
   window.CLTO.ready.then(async () => {
     hero();
-    slideshow();
     heroIntro();
+    slideshow().then(() => {
+      if (!window.gsap || reduceMotion) return;
+      window.gsap.timeline({ defaults: { ease: 'expo.out' } })
+        .from('#show-frame .slide', { x: 260, y: 40, rotate: 18, opacity: 0, duration: 1.2, stagger: { each: 0.12, from: 'end' }, clearProps: 'transform,opacity' })
+        .from('#show-caption, .show-ctrl', { opacity: 0, y: 14, duration: 0.7, clearProps: 'transform,opacity' }, 0.6);
+    });
     scoreboard();
     president();
     publicsScroll();

@@ -68,8 +68,8 @@ def brush(seed, W=800, H=1000, top=0.09, bot=0.91, core=(0.17, 0.83), skew=0.05,
         else: cx, cy = r.uniform(w * 0.05, w * 0.8), r.uniform(B * 1.01, min(h, B * 1.08))
         rad = r.uniform(1.2, 5) * S
         d.ellipse([cx - rad, cy - rad, cx + rad, cy + rad], fill=255)
-    img = img.filter(ImageFilter.GaussianBlur(0.5 * S)).resize((W, H), Image.LANCZOS)
-    out = Image.new("LA", (W, H), 0)
+    img = img.filter(ImageFilter.GaussianBlur(0.5 * S)).resize((W * 5 // 8, H * 5 // 8), Image.LANCZOS)
+    out = Image.new("LA", img.size, 0)
     out.putalpha(img)
     return out
 

@@ -31,8 +31,8 @@
     if (slides.length) {
       frame.innerHTML = slides.map((sl, i) => `<figure class="slide" aria-roledescription="diapositive" aria-label="${i + 1} sur ${slides.length}">
         <span class="slide-swash" aria-hidden="true"></span><div class="slide-paint">
-        <img src="${esc(sl.image)}" alt="" ${i > 1 ? 'loading="lazy"' : ''}>
-        ${sl.title || sl.label ? `<figcaption>${sl.label ? `<span class="slide-label">${esc(sl.label)}</span>` : ''}${sl.title ? (sl.link ? `<a href="${esc(sl.link)}">${esc(sl.title)}</a>` : `<b>${esc(sl.title)}</b>`) : ''}</figcaption>` : ''}</div></figure>`).join('');
+        <img src="${esc(sl.image)}" alt="" ${i > 1 ? 'loading="lazy"' : ''}></div>
+        ${sl.title || sl.label ? `<figcaption>${sl.label ? `<span class="slide-label">${esc(sl.label)}</span>` : ''}${sl.title ? (sl.link ? `<a href="${esc(sl.link)}">${esc(sl.title)}</a>` : `<b>${esc(sl.title)}</b>`) : ''}</figcaption>` : ''}</figure>`).join('');
     }
     const figs = qsa('.slide', frame);
     const N = figs.length;
@@ -60,6 +60,8 @@
       }
       btns.forEach((b, i) => { b.classList.toggle('is-active', i === cur); b.classList.toggle('is-done', i < cur); });
       if (count) count.innerHTML = `<b>${String(cur + 1).padStart(2, '0')}</b> / ${String(N).padStart(2, '0')}`;
+      const cap = qs('#show-caption'), fc = figs[cur].querySelector('figcaption');
+      if (cap) { cap.classList.remove('is-in'); cap.innerHTML = fc ? fc.innerHTML : ''; void cap.offsetWidth; cap.classList.add('is-in'); }
       if (glow) glow.style.backgroundImage = `url("${figs[cur].querySelector('img').src}")`;
     };
     const show = (n, dir) => {

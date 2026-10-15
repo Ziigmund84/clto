@@ -804,3 +804,25 @@ main:has(.hero) .publics-intro { padding-top: clamp(110px, 13vw, 190px); }
 /* Légende à hauteur fixe : le changement de photo ne fait plus bouger la page */
 .show-caption { height: calc(2 * clamp(1.6rem, 2.4vw, 2.1rem) + 4px); min-height: 0; margin-top: 18px; overflow: hidden; align-content: start; }
 .show-caption a, .show-caption b { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* « Trouvez votre place » : section calée sur la hauteur de l'écran, cartes au centre pendant l'épinglage */
+@media (min-width: 761px) and (prefers-reduced-motion: no-preference) {
+  .publics { min-height: 100svh; display: flex; flex-direction: column; justify-content: center; padding: calc(var(--header-solid) + 10px) 0 30px; }
+  main:has(.hero) .publics-intro { padding-top: 0; }
+  .publics .sec-head-row { margin-bottom: 0; }
+  .publics .sec-head { margin-bottom: 0; gap: 10px; }
+  .publics .sec-head h2 { font-size: clamp(2.2rem, 4.2vw, 3.6rem); }
+  .publics-track { padding-top: 26px; padding-bottom: 0; }
+  .pub-card { min-height: min(540px, 58svh); }
+}
+.publics .sec-head-row { margin-bottom: 0; }
+.publics-track { padding-top: 26px; }
+/* survol des cartes : le texte reste lisible (blanc sur fond sombre) */
+.pub-card:hover, .pub-card:focus-visible, .album:hover, .bg-navy a.agenda-item:hover, .bg-navy a.rung:hover, .cta-band a:not(.btn):hover { color: var(--white); }
+.pub-card:hover h3 { color: var(--gold-2); }
+main .publics .sec-head-row, main .publics .sec-head { margin-bottom: 0; }
+@media (min-width: 761px) and (prefers-reduced-motion: no-preference) {
+  main .publics .publics-intro { padding-top: 0; }
+  .publics .pub-card { min-height: 0; height: min(520px, 56svh); }
+}
+.pub-card img { width: 130%; max-width: none; left: -15%; right: auto; }

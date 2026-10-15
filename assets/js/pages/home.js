@@ -36,6 +36,7 @@
     }
     const figs = qsa('.slide', frame);
     const N = figs.length;
+    frame.classList.add('is-ready');
     const ctrl = qs('.show-ctrl');
     if (N < 2) { if (ctrl) ctrl.hidden = true; figs.forEach((f) => { f.dataset.pos = 0; }); return; }
     bars.innerHTML = figs.map((_, i) => `<button type="button" aria-label="Voir la photo ${i + 1}"><i></i></button>`).join('');
@@ -173,13 +174,37 @@
     reveal(box);
   }
 
+  /* Interclubs : choisir une équipe change la photo, le grand sigle de division et la fiche */
   async function teams() {
     const { data } = await sb.from('clto_teams').select('*').order('position');
-    const abbr = (d) => { const s = String(d || '').toLowerCase(); if (s.startsWith('nationale')) return 'N' + (s.match(/\d/) || [''])[0]; if (s.startsWith('pré')) return 'PN'; if (s.startsWith('régionale')) return 'R' + (s.match(/\d/) || [''])[0]; if (s.startsWith('départementale')) return 'D' + (s.match(/\d/) || [''])[0]; return '•'; };
-    qs('#home-ladder').innerHTML = (data || []).map((t) => `<a class="rung" href="interclubs.html"><span class="lvl">${abbr(t.division)}</span><div><b>${esc(t.name)}</b><small>${esc(t.division || '')}</small></div><span aria-hidden="true">${I.arrow.replace('<svg', '<svg width="22" height="22"')}</span></a>`).join('');
-    const first = (data || []).find((t) => t.image);
-    if (first) qs('#home-team-img').src = first.image;
-    reveal(qs('#home-ladder').parentElement);
+    const list = data || [];
+    const abbr = (d) => { const s = String(d || '').toLowerCase(); const n = (s.match(/\d/) || [''])[0]; if (s.startsWith('nationale')) return 'N' + n; if (s.startsWith('pré')) return 'PN'; if (s.startsWith('régionale')) return 'R' + n; if (s.startsWith('départementale')) return 'D' + n; return '•'; };
+    const ladder = qs('#home-ladder');
+    if (!list.length) return;
+    ladder.setAttribute('role', 'tablist');
+    ladder.innerHTML = list.map((t, i) => `<button class="rung" type="button" role="tab" aria-selected="${i === 0}" data-i="${i}"><span class="lvl">${abbr(t.division)}</span><div><b>${esc(t.name)}</b><small>${esc(t.division || '')}</small></div><span class="rung-check" aria-hidden="true"></span></button>`).join('');
+    const fallback = qs('#team-photos img') ? qs('#team-photos img').src : '';
+    qs('#team-photos').innerHTML = list.map((t, i) => `<img src="${esc(t.image || fallback)}" alt="Équipe ${esc(t.name)}" class="${i === 0 ? 'is-on' : ''}" loading="lazy">`).join('');
+    const imgs = qsa('#team-photos img'), rungs = qsa('.rung', ladder);
+    let cur = 0, timer = null, chosen = false;
+    const select = (i) => {
+      if (i === cur && imgs[i].classList.contains('is-on')) return;
+      imgs.forEach((im, k) => { im.classList.toggle('is-on', k === i); im.classList.toggle('is-off', k === cur && k !== i); });
+      rungs.forEach((r, k) => r.setAttribute('aria-selected', String(k === i)));
+      cur = i;
+      const t = list[i], big = qs('#team-big');
+      big.textContent = abbr(t.division);
+      big.classList.remove('is-in'); void big.offsetWidth; big.classList.add('is-in');
+      qs('#team-info').innerHTML = `<b>${esc(t.name)}</b><span>${esc(t.division || '')}${t.captain ? ' · capitaine ' + esc(t.captain) : ''}</span>${t.link ? `<a href="${esc(t.link)}" target="_blank" rel="noopener">Résultats en direct</a>` : ''}`;
+    };
+    rungs.forEach((r, k) => {
+      r.addEventListener('click', () => { chosen = true; clearInterval(timer); select(k); });
+      r.addEventListener('mouseenter', () => { if (!chosen) { clearInterval(timer); select(k); } });
+    });
+    cur = -1; select(0);
+    /* tant que personne ne choisit, les équipes défilent toutes seules */
+    if (!reduceMotion) timer = setInterval(() => { if (!chosen && !document.hidden) select((cur + 1) % list.length); }, 4500);
+    reveal(ladder.parentElement);
   }
 
   function president() {

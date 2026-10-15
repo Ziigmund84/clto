@@ -62,6 +62,7 @@
       ${ln(472, 0, 472, 610)}${ln(868, 0, 868, 610)}
       ${ln(0, 305, 472, 305)}${ln(868, 305, 1340, 305)}
       ${ln(670, -40, 670, 650, 'ln-net')}
+      <g class="court-life" data-v="${vertical ? 1 : 0}"></g>
     </g></svg>`;
   }
   const COURT = `<div class="court" aria-hidden="true">${courtSVG(false)}${courtSVG(true)}</div>`;
@@ -267,6 +268,55 @@
     });
   }
 
+  /* Vie sur le terrain : un joueur se déplace (traces de pas), les volants tombent en face (impacts) */
+  function courtLife() {
+    if (reduceMotion) return;
+    const NS = 'http://www.w3.org/2000/svg';
+    qsa('[data-court-life] .court-life').forEach((layer) => {
+      const vertical = layer.dataset.v === '1';
+      const P = (x, y) => (vertical ? [y, x] : [x, y]);
+      const svg = layer.closest('svg');
+      const visible = () => svg.getBoundingClientRect().width > 0 && !document.hidden;
+      const add = (html, life) => { const g = document.createElementNS(NS, 'g'); g.innerHTML = html; const el = g.firstElementChild; layer.appendChild(el); setTimeout(() => el.remove(), life); return el; };
+      const foot = (x, y, ang, side) => {
+        const [px, py] = P(x, y); const a = vertical ? 90 - ang : ang;
+        add(`<g class="step" transform="translate(${px.toFixed(1)} ${py.toFixed(1)}) rotate(${(a + 90).toFixed(1)}) translate(${side * 9} 0)"><ellipse cx="0" cy="-7" rx="7" ry="11"/><ellipse cx="0" cy="13" rx="5.5" ry="6.5"/></g>`, 3400);
+      };
+      const impact = (x, y) => {
+        const [px, py] = P(x, y);
+        add(`<g class="impact" transform="translate(${px.toFixed(1)} ${py.toFixed(1)})"><circle class="imp-ring" r="26"/><circle class="imp-ring r2" r="26"/><circle class="imp-dot" r="7"/></g>`, 2200);
+      };
+      const BASE = [335, 305];
+      const TARGETS = [[445, 95], [445, 515], [120, 95], [120, 515], [335, 70], [335, 540], [430, 305], [140, 305]];
+      const wait = (ms) => new Promise((res) => setTimeout(res, ms));
+      const walk = async (from, to) => {
+        const dx = to[0] - from[0], dy = to[1] - from[1], dist = Math.hypot(dx, dy);
+        const n = Math.max(2, Math.round(dist / 62)), ang = Math.atan2(dy, dx) * 180 / Math.PI;
+        for (let i = 1; i <= n; i++) {
+          const t = i / n;
+          foot(from[0] + dx * t, from[1] + dy * t, ang, i % 2 ? 1 : -1);
+          await wait(170);
+        }
+      };
+      (async () => {
+        await wait(2600);
+        let last = -1;
+        for (;;) {
+          if (!visible()) { await wait(1000); continue; }
+          let k; do { k = Math.floor(Math.random() * TARGETS.length); } while (k === last); last = k;
+          const tgt = TARGETS[k];
+          await walk(BASE, tgt);
+          /* frappe : le volant retombe dans le camp d'en face */
+          await wait(420);
+          impact(820 + Math.random() * 430, 70 + Math.random() * 470);
+          await wait(300);
+          await walk(tgt, BASE);
+          await wait(700 + Math.random() * 600);
+        }
+      })();
+    });
+  }
+
   /* Révélation des éléments marqués data-reveal (aussi appelée après un rendu dynamique) */
   function reveal(root) {
     if (!window.gsap || reduceMotion) { qsa('[data-reveal]', root).forEach((el) => { el.style.opacity = 1; }); return; }
@@ -317,6 +367,7 @@
     applySettings();
     await loadBlocks();
     animations();
+    courtLife();
     scrollspy();
   })();
   window.CLTO.ready = ready;

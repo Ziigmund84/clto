@@ -826,3 +826,40 @@ main .publics .sec-head-row, main .publics .sec-head { margin-bottom: 0; }
   .publics .pub-card { min-height: 0; height: min(520px, 56svh); }
 }
 .pub-card img { width: 130%; max-width: none; left: -15%; right: auto; }
+
+/* Diaporama : masqué tant qu'il n'est pas prêt (pas de clignotement au chargement) */
+.js .show-frame:not(.is-ready) .slide, .js .show-frame:not(.is-ready) ~ .show-caption { opacity: 0; }
+
+/* Vie sur le terrain */
+.court-life .step { fill: rgba(255, 255, 255, .5); animation: step-fade 3.4s ease-out forwards; }
+@keyframes step-fade { 0% { opacity: 0; } 6% { opacity: 1; } 55% { opacity: .7; } 100% { opacity: 0; } }
+.court-life .imp-dot { fill: var(--gold); transform-box: fill-box; transform-origin: center; animation: imp-dot 2.2s ease-out forwards; }
+.court-life .imp-ring { fill: none; stroke: var(--gold); stroke-width: 3; transform-box: fill-box; transform-origin: center; animation: imp-ring 1.4s cubic-bezier(.2, .8, .3, 1) forwards; }
+.court-life .imp-ring.r2 { stroke: rgba(255, 255, 255, .7); stroke-width: 2; animation-delay: .18s; opacity: 0; }
+@keyframes imp-dot { 0% { transform: scale(0); opacity: 1; } 12% { transform: scale(1.4); } 25% { transform: scale(1); } 70% { opacity: .9; } 100% { opacity: 0; } }
+@keyframes imp-ring { 0% { transform: scale(.1); opacity: 1; } 100% { transform: scale(2.4); opacity: 0; } }
+
+/* Interclubs de l'accueil : visuel dynamique par équipe */
+.team-visual { position: relative; aspect-ratio: 4 / 4.2; isolation: isolate; }
+.team-big { position: absolute; left: -2%; top: -12%; z-index: -1; font-family: var(--font-display); font-weight: 900; font-size: clamp(9rem, 22vw, 19rem); line-height: .8; color: transparent; -webkit-text-stroke: 3px var(--gold); opacity: .9; pointer-events: none; }
+.team-big.is-in { animation: big-in .7s cubic-bezier(.22, .9, .25, 1) both; }
+@keyframes big-in { from { opacity: 0; transform: translateX(-30px) skewX(-8deg); } }
+.team-photos { position: absolute; inset: 14% 0 12% 14%; border-radius: var(--radius-l); overflow: hidden; background: var(--navy); box-shadow: var(--shadow); transform: rotate(-2deg); }
+.team-photos img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; clip-path: inset(0 0 0 100%); transition: clip-path .8s cubic-bezier(.7, 0, .2, 1); }
+.team-photos img.is-on { clip-path: inset(0 0 0 0); z-index: 2; }
+.team-photos img.is-on { animation: team-zoom 5s ease-out both; }
+.team-photos img.is-off { clip-path: inset(0 0 0 0); z-index: 1; }
+@keyframes team-zoom { from { transform: scale(1.1); } to { transform: scale(1); } }
+.team-info { position: absolute; left: 4%; bottom: 0; z-index: 3; background: var(--navy); color: var(--white); border-radius: 16px; padding: 16px 20px; display: grid; gap: 2px; box-shadow: var(--shadow); min-width: 56%; border-left: 5px solid var(--gold); }
+.team-info b { font-family: var(--font-display); font-size: 1.8rem; line-height: 1; }
+.team-info span { color: rgba(255, 255, 255, .75); font-size: .92rem; }
+.team-info a { color: var(--gold-2); font-weight: 700; font-size: .9rem; margin-top: 4px; }
+#home-ladder .rung { width: 100%; font: inherit; text-align: left; cursor: pointer; border: 2px solid var(--line); transition: border-color .25s, background .25s, transform .3s; }
+#home-ladder .rung:hover { transform: translateX(6px); border-color: var(--blue); }
+#home-ladder .rung[aria-selected="true"] { background: var(--navy); border-color: var(--navy); color: var(--white); transform: translateX(10px); }
+#home-ladder .rung[aria-selected="true"] small { color: rgba(255, 255, 255, .7); }
+#home-ladder .rung[aria-selected="true"] .lvl { color: var(--gold); }
+.rung-check { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--line); display: grid; place-items: center; }
+.rung[aria-selected="true"] .rung-check { background: var(--gold); border-color: var(--gold); }
+.rung[aria-selected="true"] .rung-check::after { content: ""; width: 9px; height: 5px; border-left: 2.5px solid var(--navy); border-bottom: 2.5px solid var(--navy); transform: rotate(-45deg) translate(1px, -1px); }
+@media (max-width: 860px) { .team-visual { max-width: 520px; width: 100%; margin: 0 auto 30px; } }

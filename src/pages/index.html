@@ -1,5 +1,5 @@
 <!--{"title": "CLTO Badminton Orléans — le badminton pour tous, du loisir à la Nationale 2", "description": "Club de badminton à Orléans depuis 1992 : jeu libre, cours encadrés pour jeunes et adultes, stages, interclubs jusqu'en Nationale 2. Deux séances d'essai gratuites.", "scripts": ["pages/home.js"]}-->
-<section class="hero" data-court>
+<section class="hero" data-court data-court-life>
   <div class="wrap hero-grid">
     <div class="hero-copy">
       <h1 id="hero-title" aria-label="Le bad à Orléans, pour tous.">
@@ -53,7 +53,7 @@
     <div class="sec-head-row">
       <div class="sec-head">
         <span class="kicker">Trouvez votre place</span>
-        <h2 data-cms="home.publics.titre">De 5 à 85 ans, il y a un créneau pour vous</h2>
+        <h2 data-cms="home.publics.titre">De 5 à 85 ans,<br>il y a un créneau pour vous</h2>
       </div>
     </div>
   </div>
@@ -110,8 +110,10 @@
 
 <section class="section">
   <div class="wrap split">
-    <div class="split-media tilt" data-reveal="left">
-      <img src="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/clto-media/import/Copie_de_N2_12f3927e04.webp" alt="L'équipe de Nationale 2 du CLTO Badminton" loading="lazy" id="home-team-img">
+    <div class="team-visual" id="team-visual" data-reveal="left">
+      <span class="team-big" id="team-big" aria-hidden="true">N2</span>
+      <div class="team-photos" id="team-photos"><img src="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/clto-media/import/Copie_de_N2_12f3927e04.webp" alt="L'équipe de Nationale 2 du CLTO Badminton" class="is-on"></div>
+      <div class="team-info" id="team-info"></div>
     </div>
     <div>
       <div class="sec-head" data-reveal>

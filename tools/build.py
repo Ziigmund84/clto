@@ -30,6 +30,7 @@ TEMPLATE = """<!doctype html>
 <title>{title}</title>
 <meta name="description" content="{description}">
 <meta name="theme-color" content="#0a2457">
+<script>document.documentElement.classList.add('js')</script>
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{description}">
 <meta property="og:image" content="{media}logo-android-chrome-512x512.webp">
